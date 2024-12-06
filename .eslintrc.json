@@ -28,7 +28,7 @@
         "namedComponents": "function-declaration"
       }
     ],
-    "func-style": ["error", "expression", { "allowArrowFunctions": true }],
+    "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
     "prettier/prettier": "error",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off",
