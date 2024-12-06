@@ -15,12 +15,13 @@ export function DotPattern({ radius }: DotPatternProps) {
 
 export function LinePattern({ distance, lineWidth }: LinePatternProps) {
   return (
-    <div data-testid="line-pattern">
+    <>
       <path
         d={`M0 0 V${distance}`}
         stroke="currentColor"
         strokeWidth={lineWidth}
         className="stroke-slate-200"
+        data-testid="line-pattern"
       />
       <path
         d={`M0 0 H${distance}`}
@@ -28,6 +29,6 @@ export function LinePattern({ distance, lineWidth }: LinePatternProps) {
         strokeWidth={lineWidth}
         className="stroke-slate-200"
       />
-    </div>
+    </>
   );
 }
