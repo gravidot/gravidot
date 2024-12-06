@@ -1,4 +1,9 @@
 import type { Config } from "jest";
+import nextJest from "next/jest.js";
+
+const createJestConfig = nextJest({
+  dir: "./",
+});
 
 const config: Config = {
   preset: "ts-jest",
@@ -19,4 +24,4 @@ const config: Config = {
   testPathIgnorePatterns: ["<rootDir>/src/__test__/e2e/"],
 };
 
-export default config;
+export default createJestConfig(config);

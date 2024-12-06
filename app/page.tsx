@@ -1,3 +1,1 @@
-export default function Home() {
-  return <h1 className="text-lg font-bold">hello world</h1>;
-}
+export { CanvasPage as default } from "../src/pages/canvas";
