@@ -37,3 +37,6 @@ next-env.d.ts
 
 # config
 .idea/
+
+# rust-based compiler
+.swc

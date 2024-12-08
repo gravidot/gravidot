@@ -1,1 +1,1 @@
-export { Background } from "./ui";
+export { Background, ZoomController } from "./ui";

@@ -1,2 +1,3 @@
 export { BackgroundPattern, type BackgroundProps } from "../types";
 export { Background } from "./Background";
+export { ZoomController } from "./ZoomController";

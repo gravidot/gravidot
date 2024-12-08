@@ -2,18 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #f9f9f9;
-  }
-}
-
 @font-face {
   font-family: "Pretendard";
   font-weight: 45 920;
@@ -23,8 +11,7 @@
     format("woff2-variations");
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
+html {
+  @apply bg-gradient-to-b from-stone-50 from-10% to-zinc-100 to-100% text-foreground dark:from-neutral-900 dark:from-10% dark:to-zinc-900 dark:to-100%;
   font-family: "Pretendard", Arial, Helvetica, sans-serif;
 }
