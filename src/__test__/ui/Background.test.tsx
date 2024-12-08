@@ -1,8 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { BackgroundPattern } from "../../features/background/ui/Background";
-import { Background } from "../../features/background/ui/Background/Background";
+import { Background, BackgroundPattern } from "../../features/background/ui";
 
-describe("Background Component", () => {
+describe("<Background /> Component", () => {
   it("BackgroundPattern.Dots 패턴을 기본으로 한다.", () => {
     const { container } = render(<Background />);
     const circle = container.querySelector("circle");

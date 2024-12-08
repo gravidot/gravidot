@@ -1,4 +1,4 @@
-import { DotPatternProps, LinePatternProps } from "../../types";
+import { DotPatternProps, LinePatternProps } from "../types";
 
 export function DotPattern({ radius }: DotPatternProps) {
   return (
@@ -7,7 +7,7 @@ export function DotPattern({ radius }: DotPatternProps) {
       cy={radius}
       r={radius}
       fill="currentColor"
-      className="fill-slate-200"
+      className="fill-neutral-200 dark:fill-zinc-800"
       data-testid="dot-pattern"
     />
   );
@@ -20,14 +20,14 @@ export function LinePattern({ distance, lineWidth }: LinePatternProps) {
         d={`M0 0 V${distance}`}
         stroke="currentColor"
         strokeWidth={lineWidth}
-        className="stroke-slate-200"
+        className="stroke-neutral-200 dark:fill-zinc-800"
         data-testid="line-pattern"
       />
       <path
         d={`M0 0 H${distance}`}
         stroke="currentColor"
         strokeWidth={lineWidth}
-        className="stroke-slate-200"
+        className="stroke-neutral-200 dark:fill-zinc-800"
       />
     </>
   );

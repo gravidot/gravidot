@@ -1,8 +1,8 @@
 "use client";
 
 import { memo, useCallback, useRef } from "react";
+import { BackgroundPattern, BackgroundProps } from "../types";
 import { DotPattern, LinePattern } from "./Patterns";
-import { BackgroundPattern, BackgroundProps } from "../../types";
 
 export const Background = memo(function Background({
   pattern = BackgroundPattern.Dots,
