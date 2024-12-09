@@ -86,8 +86,7 @@ export const Background = memo(function Background({
 
     {
       target: ref,
-      eventOptions: { passive: false },
-      preventDefault: true,
+      eventOptions: { passive: false, preventDefault: true },
       pinch: { scaleBounds: { min: MIN_ZOOM, max: MAX_ZOOM * 2 } },
       drag: {
         threshold: 10,
