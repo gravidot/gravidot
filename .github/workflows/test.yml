@@ -1,9 +1,9 @@
-name: Playwright Tests
+name: Unit & E2E Tests
 on:
   push:
-    branches: [main, master]
+    branches: [main, dev, "feat/**"]
   pull_request:
-    branches: [main, master]
+    branches: [main, dev, "feat/**"]
 jobs:
   test:
     timeout-minutes: 60
@@ -16,12 +16,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers
-        run: npx playwright install
+        run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: npx playwright test
+      - name: Run jest tests
+        run: npm test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
-          path: playwright-report/
+          name: test-report
+          path: test-report/
           retention-days: 30
