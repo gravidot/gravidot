@@ -12,6 +12,6 @@
 }
 
 html {
-  @apply bg-gradient-to-b from-stone-50 from-10% to-zinc-100 to-100% text-foreground dark:from-neutral-900 dark:from-10% dark:to-zinc-900 dark:to-100%;
+  @apply bg-gradient-to-b from-stone-50 from-10% via-zinc-100 via-50% to-white to-100% text-foreground dark:from-zinc-900 dark:via-zinc-950 dark:to-black;
   font-family: "Pretendard", Arial, Helvetica, sans-serif;
 }
