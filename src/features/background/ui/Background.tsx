@@ -6,6 +6,9 @@ import { useBackgroundStore } from "../hooks";
 import { BackgroundPattern, BackgroundProps } from "../types";
 import { DotPattern, LinePattern } from "./Patterns";
 
+const MIN_ZOOM = 0.1;
+const MAX_ZOOM = 2.5;
+
 export const Background = memo(function Background({
   pattern = BackgroundPattern.Dots,
   lineWidth = 1,
@@ -29,8 +32,6 @@ export const Background = memo(function Background({
   useGesture(
     {
       onMouseDown: ({ event }) => {
-        event.preventDefault();
-
         if (event.button === 1 && event.buttons === 4) {
           setIsWheelClick(true);
 
@@ -43,8 +44,6 @@ export const Background = memo(function Background({
       },
 
       onMouseMove: ({ event }) => {
-        event.preventDefault();
-
         if (isWheelClick) {
           setTransform((prev) => ({
             ...prev,
@@ -54,41 +53,28 @@ export const Background = memo(function Background({
         }
       },
 
-      onMouseUp: ({ event }) => {
-        event.preventDefault();
+      onMouseUp: () => {
         setIsWheelClick(false);
       },
 
-      onMouseLeave: ({ event }) => {
-        event.preventDefault();
+      onMouseLeave: () => {
         setIsWheelClick(false);
       },
 
-      onPinch: ({ event, offset: [scale], origin }) => {
-        event.preventDefault();
-
+      onPinch: ({ offset: [scale], origin }) => {
         const [originX, originY] = origin;
-        const minZoom = 0.1;
-        const maxZoom = 5;
 
         setTransform((prevTransform) => {
-          const deltaScale = Math.min(
-            Math.max(scale / prevTransform.zoomScale + minZoom),
-            maxZoom
-          );
-
           return {
             ...prevTransform,
             x: originX,
             y: originY,
-            zoomScale: deltaScale,
+            zoomScale: scale,
           };
         });
       },
 
-      onWheel: ({ event, movement: [mx, my] }) => {
-        event.preventDefault();
-
+      onWheel: ({ movement: [mx, my] }) => {
         setTransform((prevTransform) => ({
           ...prevTransform,
           x: -mx,
@@ -100,6 +86,8 @@ export const Background = memo(function Background({
     {
       target: ref,
       eventOptions: { passive: false },
+      preventDefault: true,
+      pinch: { scaleBounds: { min: MIN_ZOOM, max: MAX_ZOOM * 2 } },
       drag: {
         threshold: 10,
         filterTaps: true,
