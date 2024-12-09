@@ -14,15 +14,15 @@ export const Background = memo(function Background({
   lineWidth = 1,
   gap = 24,
 }: BackgroundProps) {
-  const ref = useRef<SVGSVGElement>(null);
-
   const transform = useBackgroundStore((state) => state.transform);
   const setTransform = useBackgroundStore((state) => state.setTransform);
+  const [isWheelClick, setIsWheelClick] = useState<boolean>(false);
+  const [cursor, setCursor] = useState<string>("cursor-auto");
+
+  const ref = useRef<SVGSVGElement>(null);
 
   const scaledGap: number = gap * transform.zoomScale || 1;
   const scaledOffset: number = transform.zoomScale || 1 + scaledGap / 2;
-
-  const [isWheelClick, setIsWheelClick] = useState(false);
 
   const drawPattern = useCallback(
     () => getPatternComponent(pattern, scaledGap, lineWidth, gap),
@@ -44,7 +44,10 @@ export const Background = memo(function Background({
       },
 
       onMouseMove: ({ event }) => {
+        setCursor("cursor-auto");
+
         if (isWheelClick) {
+          setCursor("cursor-grabbing");
           setTransform((prev) => ({
             ...prev,
             x: event.clientX,
@@ -61,9 +64,7 @@ export const Background = memo(function Background({
         setIsWheelClick(false);
       },
 
-      onPinch: ({ offset: [scale], origin }) => {
-        const [originX, originY] = origin;
-
+      onPinch: ({ offset: [scale], origin: [originX, originY] }) => {
         setTransform((prevTransform) => {
           return {
             ...prevTransform,
@@ -99,7 +100,7 @@ export const Background = memo(function Background({
   return (
     <svg
       ref={ref}
-      className="h-dvh w-dvw touch-none"
+      className={`h-dvh w-dvw cursor-auto touch-none ${cursor}`}
       xmlns="http://www.w3.org/2000/svg"
       data-testid="background-svg"
     >
