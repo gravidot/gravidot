@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { ArrowDown } from "../../../shared/components/ArrowDown";
 import { ControlButton } from "../../../shared/components/ControlButton";
 import { useBackgroundStore } from "../hooks";
@@ -11,6 +11,10 @@ export const ZoomController = memo(function ZoomController() {
   const zoomScale = useBackgroundStore((state) => state.transform.zoomScale);
   const setTransform = useBackgroundStore((state) => state.setTransform);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [zoomScale]);
 
   const handleOptionClick = useCallback(
     (option: number) => {
