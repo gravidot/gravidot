@@ -1,1 +1,1 @@
-export { CanvasPage as default } from "../src/pages/canvas";
+export { Board as default } from "@/pages/board";

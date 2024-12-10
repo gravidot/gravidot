@@ -18,4 +18,5 @@ export type BackgroundProps = {
   radius?: number;
   lineWidth?: number;
   gap?: number;
+  cursor?: string;
 };

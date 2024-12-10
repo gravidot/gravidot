@@ -1,13 +1,9 @@
 "use client";
 
-import { useGesture } from "@use-gesture/react";
-import { memo, useCallback, useRef, useState } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { useBackgroundStore } from "../hooks";
 import { BackgroundPattern, BackgroundProps } from "../types";
 import { DotPattern, LinePattern } from "./Patterns";
-
-const MIN_ZOOM = 0.1;
-const MAX_ZOOM = 2.5;
 
 export const Background = memo(function Background({
   pattern = BackgroundPattern.Dots,
@@ -15,91 +11,24 @@ export const Background = memo(function Background({
   gap = 24,
 }: BackgroundProps) {
   const transform = useBackgroundStore((state) => state.transform);
-  const setTransform = useBackgroundStore((state) => state.setTransform);
-  const [isWheelClick, setIsWheelClick] = useState<boolean>(false);
-  const [cursor, setCursor] = useState<string>("cursor-auto");
 
-  const ref = useRef<SVGSVGElement>(null);
-
-  const scaledGap: number = gap * transform.zoomScale || 1;
-  const scaledOffset: number = transform.zoomScale || 1 + scaledGap / 2;
+  const scaledGap = useMemo(
+    () => gap * transform.zoomScale,
+    [gap, transform.zoomScale]
+  );
+  const scaledOffset = useMemo(
+    () => (transform.zoomScale ?? 1) + scaledGap / 2,
+    [scaledGap, transform.zoomScale]
+  );
 
   const drawPattern = useCallback(
     () => getPatternComponent(pattern, scaledGap, lineWidth, gap),
     [pattern, scaledGap, lineWidth, gap]
   );
 
-  useGesture(
-    {
-      onMouseDown: ({ event }) => {
-        if (event.button === 1 && event.buttons === 4) {
-          setIsWheelClick(true);
-
-          setTransform((prev) => ({
-            ...prev,
-            x: event.clientX,
-            y: event.clientY,
-          }));
-        }
-      },
-
-      onMouseMove: ({ event }) => {
-        setCursor("cursor-auto");
-
-        if (isWheelClick) {
-          setCursor("cursor-grabbing");
-          setTransform((prev) => ({
-            ...prev,
-            x: event.clientX,
-            y: event.clientY,
-          }));
-        }
-      },
-
-      onMouseUp: () => {
-        setIsWheelClick(false);
-      },
-
-      onMouseLeave: () => {
-        setIsWheelClick(false);
-      },
-
-      onPinch: ({ offset: [scale], origin: [originX, originY] }) => {
-        setTransform((prevTransform) => {
-          return {
-            ...prevTransform,
-            x: originX,
-            y: originY,
-            zoomScale: scale,
-          };
-        });
-      },
-
-      onWheel: ({ movement: [mx, my] }) => {
-        setTransform((prevTransform) => ({
-          ...prevTransform,
-          x: -mx,
-          y: -my,
-        }));
-      },
-    },
-
-    {
-      target: ref,
-      eventOptions: { passive: false, preventDefault: true },
-      pinch: { scaleBounds: { min: MIN_ZOOM, max: MAX_ZOOM * 2 } },
-      drag: {
-        threshold: 10,
-        filterTaps: true,
-        tapsThreshold: 3,
-      },
-    }
-  );
-
   return (
     <svg
-      ref={ref}
-      className={`h-dvh w-dvw cursor-auto touch-none ${cursor}`}
+      className="h-dvh w-dvw touch-none"
       xmlns="http://www.w3.org/2000/svg"
       data-testid="background-svg"
     >
@@ -136,8 +65,9 @@ function getPatternComponent(
       return <DotPattern radius={radius / 12} />;
     case BackgroundPattern.Lines:
       return <LinePattern distance={gap} lineWidth={lineWidth} />;
-    default:
+    case BackgroundPattern.None:
       return null;
+    default:
+      return <DotPattern radius={radius / 12} />;
   }
 }
-export { BackgroundPattern };
