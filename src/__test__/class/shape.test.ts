@@ -1,8 +1,8 @@
 import { Shape } from "@/entities/shape";
 import { ColorType, Position, Size, Vertex } from "@/entities/shape/types";
 import { BoardTransform } from "@/features/background/hooks";
+import { darkenColor } from "@/shared/utils/darkenColor";
 import { RefObject } from "react";
-import { darkenColor } from "../../shared/utils/darkenColor";
 
 const mockContext = {
   save: jest.fn(),
