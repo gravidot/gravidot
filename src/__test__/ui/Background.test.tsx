@@ -1,5 +1,5 @@
+import { Background, BackgroundPattern } from "@/features/background/ui";
 import { render, screen } from "@testing-library/react";
-import { Background, BackgroundPattern } from "../../features/background/ui";
 
 describe("<Background /> Component", () => {
   it("BackgroundPattern.Dots 패턴을 기본으로 한다.", () => {

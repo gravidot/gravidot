@@ -1,7 +1,7 @@
+import { useBackgroundStore } from "@/features/background/hooks";
+import { ZoomController } from "@/features/background/ui";
 import { fireEvent, waitFor, within } from "@testing-library/dom";
 import { render, screen } from "@testing-library/react";
-import { useBackgroundStore } from "../../features/background/hooks";
-import { ZoomController } from "../../features/background/ui";
 
 describe("<ZoomController />", () => {
   test("컴포넌트가 렌더링되고 현재 줌 비율이 표시된다", () => {

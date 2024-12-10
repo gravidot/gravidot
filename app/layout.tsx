@@ -1,6 +1,6 @@
+import "@/shared/styles/globals.css";
 import type { Metadata } from "next";
 import React from "react";
-import "../src/shared/styles/globals.css";
 
 export const metadata: Metadata = {
   title: "Gravidot: A brainstorming tool with multi-touch 🗯️🤏🎶",

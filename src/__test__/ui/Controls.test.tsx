@@ -1,5 +1,5 @@
+import { Controls } from "@/features/controls";
 import { render, screen } from "@testing-library/react";
-import { Controls } from "../../features/controls";
 
 describe("<Controls />", () => {
   it("여러 Controller 를 포함해야 한다.", () => {

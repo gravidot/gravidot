@@ -1,6 +1,6 @@
+import { useClickOutsideBlur } from "@/shared/hooks/useClickOutsideBlur";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useRef } from "react";
-import { useClickOutsideBlur } from "../../shared/hooks/useClickOutsideBlur";
 
 function TestInputComponent() {
   const inputRef = useRef<HTMLInputElement>(null);
