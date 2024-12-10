@@ -20,7 +20,7 @@ export function NameController() {
       data-testid="name-controller"
     >
       <ControlInput
-        title="name view"
+        title="canvas name"
         id="name-input"
         value={name}
         onChange={(event) => {

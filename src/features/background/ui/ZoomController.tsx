@@ -1,8 +1,8 @@
 "use client";
 
+import { ArrowDown } from "@/shared/components/ArrowDown";
+import { ControlButton } from "@/shared/components/ControlButton";
 import { memo, useCallback, useEffect, useState } from "react";
-import { ArrowDown } from "../../../shared/components/ArrowDown";
-import { ControlButton } from "../../../shared/components/ControlButton";
 import { useBackgroundStore } from "../hooks";
 
 const scaleOptions = [2, 1.25, 1, 0.75, 0.5];
@@ -33,7 +33,7 @@ export const ZoomController = memo(function ZoomController() {
       data-testid="zoom-controller"
     >
       <ControlButton
-        title="zoom view"
+        title="zoom scale"
         id="zoom-button"
         aria-expanded={isOpen}
         aria-haspopup="true"
