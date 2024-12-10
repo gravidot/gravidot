@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export interface CanvasTransform {
+export interface BoardTransform {
   x: number;
   y: number;
   zoomScale: number;
@@ -8,10 +8,10 @@ export interface CanvasTransform {
 
 export type BackgroundState = {
   name: string;
-  transform: CanvasTransform;
+  transform: BoardTransform;
   setName: (name: string) => void;
   setTransform: (
-    transform: (prevTransform: CanvasTransform) => CanvasTransform
+    transform: (prevTransform: BoardTransform) => BoardTransform
   ) => void;
 };
 
