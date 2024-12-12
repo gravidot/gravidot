@@ -1,14 +1,14 @@
 "use client";
 
+import { useBoardStore } from "@/entities/board/store";
 import { ControlInput } from "@/shared/components/ControlInput";
 import { useClickOutsideBlur } from "@/shared/hooks/useClickOutsideBlur";
 import { useMeasureInputWidth } from "@/shared/hooks/useMeasureInputWidth";
 import { useRef } from "react";
-import { useBackgroundStore } from "../hooks";
 
 export function NameController() {
-  const name = useBackgroundStore((state) => state.name);
-  const setName = useBackgroundStore((state) => state.setName);
+  const name = useBoardStore((state) => state.name);
+  const setName = useBoardStore((state) => state.setName);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useClickOutsideBlur(inputRef);

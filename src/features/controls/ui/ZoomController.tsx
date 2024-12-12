@@ -1,14 +1,14 @@
 "use client";
 
+import { useBoardStore } from "@/entities/board/store";
 import { ControlButton } from "@/shared/components/ControlButton";
 import { memo, useCallback, useEffect, useState } from "react";
-import { useBackgroundStore } from "../hooks";
 
 const scaleOptions = [2, 1.25, 1, 0.75, 0.5];
 
 export const ZoomController = memo(function ZoomController() {
-  const zoomScale = useBackgroundStore((state) => state.transform.zoomScale);
-  const setTransform = useBackgroundStore((state) => state.setTransform);
+  const zoomScale = useBoardStore((state) => state.transform.zoomScale);
+  const setTransform = useBoardStore((state) => state.setTransform);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const ZoomController = memo(function ZoomController() {
 
   return (
     <div
-      className="relative text-black dark:text-white"
+      className="relative w-11 text-black dark:text-white"
       data-testid="zoom-controller"
     >
       <ControlButton
@@ -43,7 +43,7 @@ export const ZoomController = memo(function ZoomController() {
       </ControlButton>
       {isOpen && (
         <div
-          className="absolute -right-1.5 top-5 z-50 my-2"
+          className="absolute right-0 top-5 z-50 my-2 w-14"
           data-testid="zoom-options"
         >
           {scaleOptions.map((option) => (

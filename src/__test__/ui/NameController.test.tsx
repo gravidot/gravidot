@@ -1,5 +1,5 @@
-import { useBackgroundStore } from "@/features/background/hooks";
-import { NameController } from "@/features/background/ui";
+import { useBoardStore } from "@/entities/board/store";
+import { NameController } from "@/features/controls/ui/NameController";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 describe("<NameController />", () => {
@@ -10,6 +10,6 @@ describe("<NameController />", () => {
 
     fireEvent.change(input, { target: { value: "LongerTestString" } });
 
-    expect(useBackgroundStore.getState().name).toEqual("LongerTestString");
+    expect(useBoardStore.getState().name).toEqual("LongerTestString");
   });
 });

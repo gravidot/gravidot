@@ -1,5 +1,5 @@
-import { useBackgroundStore } from "@/features/background/hooks";
-import { ZoomController } from "@/features/background/ui";
+import { useBoardStore } from "@/entities/board/store";
+import { ZoomController } from "@/features/controls/ui/ZoomController";
 import { fireEvent, waitFor, within } from "@testing-library/dom";
 import { render, screen } from "@testing-library/react";
 
@@ -56,6 +56,6 @@ describe("<ZoomController />", () => {
     const option = withinOptions.getByText(/125%/);
     fireEvent.click(option);
 
-    expect(useBackgroundStore.getState().transform.zoomScale).toBe(1.25);
+    expect(useBoardStore.getState().transform.zoomScale).toBe(1.25);
   });
 });

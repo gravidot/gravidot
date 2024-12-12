@@ -1,8 +1,8 @@
-import { BoardTransform } from "@/features/background/hooks";
+import { BoardTransform } from "@/entities/board/model";
 import { darkenColor } from "@/shared/utils/darkenColor";
 import { getRandomValue } from "@/shared/utils/getRandomValue";
 import { RefObject } from "react";
-import { Color, ColorType, Position, Shadow, Size, Vertex } from "./types";
+import { Color, ColorType, Position, Shadow, Size, Vertex } from "../types";
 
 export class Shape {
   position: Position;

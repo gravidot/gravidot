@@ -1,5 +1,5 @@
-import { NameController } from "@/features/background/ui/NameController";
-import { ZoomController } from "@/features/background/ui/ZoomController";
+import { NameController } from "./NameController";
+import { ZoomController } from "./ZoomController";
 
 export function Controls() {
   return (
