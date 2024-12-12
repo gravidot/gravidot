@@ -29,7 +29,7 @@ export function Canvas({
         setCtx(context);
       }
     }
-  }, []);
+  }, [canvasRef]);
 
   useEffect(() => {
     if (!ctx) return;
@@ -42,7 +42,7 @@ export function Canvas({
         transform: transform,
       });
     });
-  }, [ctx, transform, shapes]);
+  }, [ctx, transform, shapes, canvasRef]);
 
   return (
     <canvas

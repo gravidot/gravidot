@@ -1,6 +1,5 @@
 "use client";
 
-import { ArrowDown } from "@/shared/components/ArrowDown";
 import { ControlButton } from "@/shared/components/ControlButton";
 import { memo, useCallback, useEffect, useState } from "react";
 import { useBackgroundStore } from "../hooks";
@@ -29,7 +28,7 @@ export const ZoomController = memo(function ZoomController() {
 
   return (
     <div
-      className="relative w-11 text-black dark:text-white"
+      className="relative text-black dark:text-white"
       data-testid="zoom-controller"
     >
       <ControlButton
@@ -41,11 +40,10 @@ export const ZoomController = memo(function ZoomController() {
         data-testid="zoom-button"
       >
         <span data-testid="zoom-scale">{Math.round(zoomScale * 100)}%</span>
-        <ArrowDown />
       </ControlButton>
       {isOpen && (
         <div
-          className="absolute right-0 top-5 z-50 my-2 w-14"
+          className="absolute -right-1.5 top-5 z-50 my-2"
           data-testid="zoom-options"
         >
           {scaleOptions.map((option) => (
