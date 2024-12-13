@@ -8,7 +8,7 @@ export function Loading() {
             className="h-1.5 w-1.5 animate-bounce rounded-full bg-zinc-400 dark:bg-stone-400"
             style={{
               animationDelay: `${index * 150}ms`,
-              transform: `translateY(${index * 20}px)`,
+              transform: `translateY(${index * 2}px)`,
             }}
           />
         ))}
