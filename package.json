@@ -15,6 +15,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.47.3",
     "@use-gesture/react": "^10.3.1",
     "next": "15.0.3",
     "react": "^18.0",
