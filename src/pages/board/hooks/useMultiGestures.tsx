@@ -1,4 +1,4 @@
-import { Shape } from "@/entities/shape";
+import { Shape } from "@/entities/shape/model";
 import { useBackgroundStore } from "@/features/background/hooks";
 import { useGesture } from "@use-gesture/react";
 import { RefObject, useRef, useState } from "react";

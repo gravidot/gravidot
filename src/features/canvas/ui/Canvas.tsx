@@ -1,6 +1,6 @@
 "use client";
 
-import { Shape } from "@/entities/shape";
+import { Shape } from "@/entities/shape/model";
 import { useBackgroundStore } from "@/features/background/hooks";
 import { RefObject, useEffect, useState } from "react";
 
