@@ -6,7 +6,7 @@ import { Controls } from "@/features/controls";
 import { useMultiGestures } from "@/pages/board/hooks/useMultiGestures";
 import { useRef } from "react";
 
-export function Board() {
+export function BoardPage() {
   const ref = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 

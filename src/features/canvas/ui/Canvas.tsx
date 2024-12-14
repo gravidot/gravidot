@@ -1,7 +1,7 @@
 "use client";
 
+import { useBoardStore } from "@/entities/board/store";
 import { Shape } from "@/entities/shape/model";
-import { useBackgroundStore } from "@/features/background/hooks";
 import { RefObject, useEffect, useState } from "react";
 
 export function Canvas({
@@ -11,7 +11,7 @@ export function Canvas({
   canvasRef: RefObject<HTMLCanvasElement>;
   shapes: Shape[];
 }) {
-  const transform = useBackgroundStore((state) => state.transform);
+  const transform = useBoardStore((state) => state.transform);
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
 
   useEffect(() => {

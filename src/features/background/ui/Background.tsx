@@ -1,7 +1,7 @@
 "use client";
 
+import { useBoardStore } from "@/entities/board/store";
 import { memo, useCallback, useMemo } from "react";
-import { useBackgroundStore } from "../hooks";
 import { BackgroundPattern, BackgroundProps } from "../types";
 import { DotPattern, LinePattern } from "./Patterns";
 
@@ -10,7 +10,7 @@ export const Background = memo(function Background({
   lineWidth = 1,
   gap = 24,
 }: BackgroundProps) {
-  const transform = useBackgroundStore((state) => state.transform);
+  const transform = useBoardStore((state) => state.transform);
 
   const scaledGap = useMemo(
     () => gap * transform.zoomScale,
