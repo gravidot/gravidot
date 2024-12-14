@@ -1,17 +1,29 @@
 import { RefObject, useEffect } from "react";
 
-export function useClickOutsideBlur(ref: RefObject<HTMLElement>) {
+export function useClickOutsideBlur(
+  ref: RefObject<HTMLElement>,
+  optionCallback?: () => void | Promise<void>,
+  whenEnterCallback?: () => void | Promise<void>
+) {
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent | PointerEvent) => {
+    const handleClickOutside = async (event: MouseEvent | PointerEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
         ref.current.blur();
+
+        if (optionCallback) {
+          await optionCallback();
+        }
       }
     };
 
-    const handleEnterKey = (event: KeyboardEvent) => {
+    const handleEnterKey = async (event: KeyboardEvent) => {
       if (ref.current && event.key === "Enter") {
         event.preventDefault();
         ref.current.blur();
+
+        if (whenEnterCallback) {
+          await whenEnterCallback();
+        }
       }
     };
 
@@ -26,5 +38,5 @@ export function useClickOutsideBlur(ref: RefObject<HTMLElement>) {
       document.removeEventListener("wheel", handleClickOutside);
       document.removeEventListener("keyup", handleEnterKey);
     };
-  }, [ref]);
+  }, [ref, optionCallback, whenEnterCallback]);
 }

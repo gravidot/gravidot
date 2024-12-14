@@ -23,7 +23,9 @@ export function useMeasureInputWidth(
       const font = getComputedStyle(inputRef.current).font;
       contextRef.current.font = font;
 
-      const textWidth = contextRef.current.measureText(value || "  ").width;
+      const textWidth = contextRef.current.measureText(
+        value || "Untitled"
+      ).width;
       inputRef.current.style.width = `${Math.min(textWidth + CURSOR_WIDTH, MAX_WIDTH)}px`;
     }
   }, [value, inputRef]);

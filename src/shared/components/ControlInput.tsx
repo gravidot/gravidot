@@ -11,6 +11,7 @@ export const ControlInput = forwardRef<HTMLInputElement, ControlInputProps>(
         type="text"
         ref={ref}
         {...rest}
+        placeholder="Untitled"
         className="flex w-11 justify-center gap-x-1.5 bg-white text-xs focus:outline-none dark:bg-black"
       />
     );

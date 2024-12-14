@@ -2,16 +2,16 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { Board, BoardTransform } from "../model";
 
-export type BoardState = Board & {
-  setId: () => void;
+type BoardState = Board & {
+  updateBoard: (boardData: Partial<Board>) => void;
   setName: (name: string) => void;
   setTransform: (
-    transform: (prevTransform: BoardTransform) => BoardTransform
+    updater: (prevTransform: BoardTransform) => BoardTransform
   ) => void;
+  clearBoard: () => void;
 };
 
-const initialStore = {
-  id: null,
+const initialBoardState = {
   name: "Untitled",
   transform: {
     x: 0,
@@ -23,25 +23,35 @@ const initialStore = {
 export const useBoardStore = create<BoardState>()(
   persist(
     (set) => ({
-      ...initialStore,
+      ...initialBoardState,
 
-      setId: () => {
+      updateBoard: (boardData: Partial<Board>) => {
         set((state) => ({
-          id: state.id,
+          ...state,
+          ...boardData,
         }));
       },
 
-      setName: (value) => {
-        set(() => ({
-          name: value,
+      setName: (name) => {
+        set((state) => ({
+          ...state,
+          name,
         }));
       },
 
-      setTransform: (updater) =>
+      setTransform: (updater) => {
         set((state) => ({
           ...state,
           transform: updater(state.transform),
-        })),
+        }));
+      },
+
+      clearBoard: () => {
+        set(() => ({
+          id: undefined,
+          ...initialBoardState,
+        }));
+      },
     }),
     {
       name: "board-storage",

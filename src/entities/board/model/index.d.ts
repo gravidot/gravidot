@@ -5,9 +5,7 @@ export interface BoardTransform {
 }
 
 export interface Board {
-  id: string | null;
+  id?: string;
   name: string;
   transform: BoardTransform;
-  createdAt?: string;
-  updatedAt?: string;
 }
