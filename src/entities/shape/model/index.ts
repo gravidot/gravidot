@@ -8,39 +8,38 @@ export class Shape {
   position: Position;
   size: Size;
   vertex: number;
-  rotate: number;
   color: Color;
   content: string;
+  isEditing: boolean = false;
 
   constructor({
     position,
     size = { w: 120, h: 120 },
     color = getRandomValue(ColorType)().value,
     vertex = getRandomValue(Vertex)().value,
-    rotate = Math.floor(Math.random() * 45),
-    content = "Touch Ideas!",
+    content = "Touch Idea!",
   }: {
     position: Position;
     size?: Size;
     color?: Color;
     vertex?: number;
-    rotate?: number;
     content?: string;
   }) {
     this.position = position;
     this.size = size;
     this.color = color;
     this.vertex = vertex;
-    this.rotate = rotate;
     this.content = content;
   }
 
   draw({
     canvasRef,
     transform,
+    isSelected,
   }: {
     canvasRef: RefObject<HTMLCanvasElement>;
     transform: BoardTransform;
+    isSelected: boolean;
   }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -51,14 +50,9 @@ export class Shape {
     ctx.save();
     this.applyShadow(ctx);
     this.applyTransform(ctx, transform);
-
     this.drawShape(ctx, transform);
-
-    ctx.restore();
-    ctx.save();
-    this.applyShadow(ctx);
-    this.drawText(ctx, transform);
-
+    this.drawText(ctx);
+    this.setEditing(ctx, isSelected);
     ctx.restore();
   }
 
@@ -73,10 +67,10 @@ export class Shape {
     ctx: CanvasRenderingContext2D,
     transform: BoardTransform
   ) {
-    const fixedX = (this.position.x + transform.x) / transform.zoomScale;
-    const fixedY = (this.position.y + transform.y) / transform.zoomScale;
+    const fixedX = this.position.x / transform.zoomScale;
+    const fixedY = this.position.y / transform.zoomScale;
+
     ctx.translate(fixedX, fixedY);
-    ctx.rotate((this.rotate * Math.PI) / 180);
   }
 
   private drawShape(ctx: CanvasRenderingContext2D, transform: BoardTransform) {
@@ -133,15 +127,89 @@ export class Shape {
     ctx.closePath();
   }
 
-  private drawText(ctx: CanvasRenderingContext2D, transform: BoardTransform) {
-    const fixedX = (this.position.x + transform.x) / transform.zoomScale;
-    const fixedY = (this.position.y + transform.y) / transform.zoomScale;
-    ctx.translate(fixedX, fixedY);
+  private drawText(ctx: CanvasRenderingContext2D) {
+    const maxWidth = this.size.w;
+    const maxHeight = this.size.h;
 
     ctx.fillStyle = darkenColor(this.color.fill);
-    ctx.font = "16px Pretendard";
+    ctx.font = "14px Pretendard";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(this.content, 0, 0);
+
+    const lineHeight = 20;
+
+    const getLines = (text: string, maxWidth: number): string[] => {
+      const words = text.split(" ");
+      const lines: string[] = [];
+      let currentLine = words[0];
+
+      for (let i = 1; i < words.length; i++) {
+        const word = words[i];
+        const testLine = currentLine + " " + word;
+        const testWidth = ctx.measureText(testLine).width;
+
+        if (testWidth > maxWidth) {
+          lines.push(currentLine);
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      }
+      lines.push(currentLine);
+      return lines;
+    };
+
+    let lines = this.content
+      .split("\n")
+      .flatMap((line) => getLines(line, maxWidth));
+
+    const maxLines = Math.floor(maxHeight / lineHeight);
+
+    if (lines.length > maxLines) {
+      lines = lines.slice(0, maxLines);
+      const lastLine = lines[lines.length - 1];
+      let truncatedLine = lastLine;
+
+      while (
+        ctx.measureText(truncatedLine + "...").width > maxWidth &&
+        truncatedLine.length > 0
+      ) {
+        truncatedLine = truncatedLine.slice(0, -1);
+      }
+
+      lines[lines.length - 1] = truncatedLine + "...";
+    }
+
+    const startY = -((lines.length - 1) * lineHeight) / 2;
+
+    lines.forEach((line, index) => {
+      ctx.fillText(line, 0, startY + index * lineHeight);
+    });
+  }
+
+  private setEditing(ctx: CanvasRenderingContext2D, isEditing: boolean) {
+    this.isEditing = isEditing;
+    if (this.isEditing) {
+      ctx.strokeStyle = darkenColor(this.color.fill);
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
+  }
+
+  setContent(ctx: CanvasRenderingContext2D, newContent: string) {
+    this.content = newContent;
+
+    const lines = this.content.split("\n");
+    const lineHeight = 20;
+    const startY = -((lines.length - 1) * lineHeight) / 2;
+
+    lines.forEach((line, index) => {
+      ctx.fillText(line, 0, startY + index * lineHeight);
+    });
+  }
+
+  setPosition(newX: number, newY: number) {
+    this.position.x = newX;
+    this.position.y = newY;
   }
 }

@@ -18,7 +18,7 @@ export const Vertex = {
 } as const;
 
 export const Shadow = {
-  shadowColor: "rgba(128, 128, 128, 0.2)",
+  shadowColor: "rgba(200, 200, 200, 0.2)",
   offsetX: 0,
   offsetY: 12,
   blur: 50,

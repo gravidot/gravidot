@@ -8,5 +8,5 @@ export function darkenColor(color: string, amount: number = 50): string {
   const darkenedG = Math.max(g - amount, 0);
   const darkenedB = Math.max(b - amount, 0);
 
-  return `rgba(${darkenedR}, ${darkenedG}, ${darkenedB}, 0.5)`;
+  return `rgb(${darkenedR}, ${darkenedG}, ${darkenedB})`;
 }

@@ -4,11 +4,25 @@ import { ColorType, Position, Size, Vertex } from "@/entities/shape/types";
 import { darkenColor } from "@/shared/utils/darkenColor";
 import { RefObject } from "react";
 
+const mockTextMetrics: TextMetrics = {
+  width: 10 as number,
+  actualBoundingBoxAscent: 0,
+  actualBoundingBoxDescent: 0,
+  actualBoundingBoxLeft: 0,
+  actualBoundingBoxRight: 0,
+  alphabeticBaseline: 0,
+  emHeightAscent: 0,
+  emHeightDescent: 0,
+  fontBoundingBoxAscent: 0,
+  fontBoundingBoxDescent: 0,
+  hangingBaseline: 0,
+  ideographicBaseline: 0,
+};
+
 const mockContext = {
   save: jest.fn(),
   restore: jest.fn(),
   translate: jest.fn(),
-  rotate: jest.fn(),
   fill: jest.fn(),
   beginPath: jest.fn(),
   arc: jest.fn(),
@@ -17,6 +31,7 @@ const mockContext = {
   lineTo: jest.fn(),
   closePath: jest.fn(),
   fillText: jest.fn(),
+  measureText: jest.fn().mockReturnValue(mockTextMetrics),
   fillStyle: "",
   font: "",
   textAlign: "",
@@ -63,21 +78,22 @@ describe("Shape class", () => {
     expect(shape.size).toEqual(size);
     expect(Object.values(ColorType)).toContainEqual(shape.color);
     expect(Object.values(Vertex)).toContain(shape.vertex);
-    expect(shape.rotate).toBeGreaterThanOrEqual(0);
-    expect(shape.rotate).toBeLessThan(45);
-    expect(shape.content).toBe("Touch Ideas!");
+    expect(shape.content).toBe("Touch Idea!");
   });
 
   test("draw 메서드 호출 시 컨텍스트 메서드를 반드시 호출할 수 있어야 한다.", () => {
     const position: Position = { x: 50, y: 50 };
     const shape = new Shape({ position });
 
-    shape.draw({ canvasRef: mockCanvasRef, transform: mockTransform });
+    shape.draw({
+      canvasRef: mockCanvasRef,
+      transform: mockTransform,
+      isSelected: false,
+    });
 
-    expect(mockContext.save).toHaveBeenCalledTimes(2);
-    expect(mockContext.restore).toHaveBeenCalledTimes(2);
+    expect(mockContext.save).toHaveBeenCalledTimes(1);
+    expect(mockContext.restore).toHaveBeenCalledTimes(1);
     expect(mockContext.translate).toHaveBeenCalled();
-    expect(mockContext.rotate).toHaveBeenCalled();
     expect(mockContext.fill).toHaveBeenCalled();
   });
 
@@ -85,10 +101,14 @@ describe("Shape class", () => {
     const position: Position = { x: 0, y: 0 };
     const shape = new Shape({ position, content: "Gravidot!!" });
 
-    shape.draw({ canvasRef: mockCanvasRef, transform: mockTransform });
+    shape.draw({
+      canvasRef: mockCanvasRef,
+      transform: mockTransform,
+      isSelected: false,
+    });
 
     expect(mockContext.fillText).toHaveBeenCalledWith("Gravidot!!", 0, 0);
-    expect(mockContext.font).toBe("16px Pretendard");
+    expect(mockContext.font).toBe("14px Pretendard");
     expect(mockContext.textAlign).toBe("center");
     expect(mockContext.textBaseline).toBe("middle");
   });
@@ -97,7 +117,11 @@ describe("Shape class", () => {
     const position: Position = { x: 0, y: 0 };
     const shape = new Shape({ position });
 
-    shape.draw({ canvasRef: mockCanvasRef, transform: mockTransform });
+    shape.draw({
+      canvasRef: mockCanvasRef,
+      transform: mockTransform,
+      isSelected: false,
+    });
 
     expect(mockContext.shadowColor).toBeDefined();
     expect(mockContext.shadowOffsetX).toBeDefined();
@@ -118,7 +142,11 @@ describe("Shape 클래스의 drawShape 메서드", () => {
       color: ColorType.blue,
     });
 
-    shape.draw({ canvasRef: mockCanvasRef, transform: mockTransform });
+    shape.draw({
+      canvasRef: mockCanvasRef,
+      transform: mockTransform,
+      isSelected: false,
+    });
 
     expect(mockContext.beginPath).toHaveBeenCalled();
     expect(mockContext.arc).toHaveBeenCalledWith(0, 0, 96, 0, 2 * Math.PI);
@@ -132,7 +160,11 @@ describe("Shape 클래스의 drawShape 메서드", () => {
       color: ColorType.green,
     });
 
-    shape.draw({ canvasRef: mockCanvasRef, transform: mockTransform });
+    shape.draw({
+      canvasRef: mockCanvasRef,
+      transform: mockTransform,
+      isSelected: false,
+    });
 
     const halfSide = 120 / Math.sqrt(2);
 
@@ -153,7 +185,11 @@ describe("Shape 클래스의 drawShape 메서드", () => {
       color: ColorType.pink,
     });
 
-    shape.draw({ canvasRef: mockCanvasRef, transform: mockTransform });
+    shape.draw({
+      canvasRef: mockCanvasRef,
+      transform: mockTransform,
+      isSelected: false,
+    });
 
     expect(mockContext.beginPath).toHaveBeenCalled();
     expect(mockContext.moveTo).toHaveBeenCalled();
@@ -169,7 +205,11 @@ describe("Shape 클래스의 drawShape 메서드", () => {
       color: ColorType.yellow,
     });
 
-    shape.draw({ canvasRef: mockCanvasRef, transform: mockTransform });
+    shape.draw({
+      canvasRef: mockCanvasRef,
+      transform: mockTransform,
+      isSelected: false,
+    });
 
     expect(mockContext.beginPath).toHaveBeenCalled();
     expect(mockContext.moveTo).toHaveBeenCalled();
@@ -185,13 +225,17 @@ describe("Shape 클래스의 drawShape 메서드", () => {
       color: ColorType.purple,
     });
 
-    shape.draw({ canvasRef: mockCanvasRef, transform: mockTransform });
+    shape.draw({
+      canvasRef: mockCanvasRef,
+      transform: mockTransform,
+      isSelected: false,
+    });
 
     expect(mockContext.fillStyle).toBe(darkenColor(ColorType.purple.fill));
   });
 });
 
-describe("shape.draw 메서드에서 canvas와 ctx를 확인한다.", () => {
+describe("shape.draw 메서드에서 canvas와 context를 확인한다.", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -203,7 +247,11 @@ describe("shape.draw 메서드에서 canvas와 ctx를 확인한다.", () => {
       color: ColorType.green,
     });
 
-    shape.draw({ canvasRef: mockCanvasRefWithNull, transform: mockTransform });
+    shape.draw({
+      canvasRef: mockCanvasRefWithNull,
+      transform: mockTransform,
+      isSelected: false,
+    });
 
     expect(mockCanvasRefWithNull.current).toBeNull();
     expect(mockContext.save).not.toHaveBeenCalled();
@@ -219,6 +267,7 @@ describe("shape.draw 메서드에서 canvas와 ctx를 확인한다.", () => {
     shape.draw({
       canvasRef: mockCanvasRefWithNullCtx,
       transform: mockTransform,
+      isSelected: false,
     });
 
     expect(mockCanvasRefWithNullCtx.current?.getContext).toHaveBeenCalledWith(
@@ -234,7 +283,11 @@ describe("shape.draw 메서드에서 canvas와 ctx를 확인한다.", () => {
       color: ColorType.green,
     });
 
-    shape.draw({ canvasRef: mockCanvasRef, transform: mockTransform });
+    shape.draw({
+      canvasRef: mockCanvasRef,
+      transform: mockTransform,
+      isSelected: false,
+    });
 
     expect(mockCanvasRef.current?.getContext).toHaveBeenCalledWith("2d");
     expect(mockContext.save).toHaveBeenCalled();
