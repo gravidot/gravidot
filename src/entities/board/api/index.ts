@@ -21,12 +21,12 @@ export async function fetchOrCreateBoard(
       log.info(`✅📋 Board fetched successfully: ${board.id}`);
       useBoardStore.getState().updateBoard(board);
       return board;
-    } else {
-      log.info("🚑 Board not found, creating a new board.");
     }
   }
 
-  return await createBoard(userId);
+  const newBoard = await createBoard(userId);
+  useBoardStore.getState().updateBoard(newBoard);
+  return newBoard;
 }
 
 async function createBoard(userId: string): Promise<Board> {
@@ -41,15 +41,18 @@ async function createBoard(userId: string): Promise<Board> {
   const { data: boardData, error: boardError } = await supabase
     .from(DBTable.Board)
     .insert([{ name, transform, created_at: now }])
-    .select()
-    .single();
+    .select("id, name, transform")
+    .maybeSingle();
 
   if (boardError && boardError.code !== "PGRST116") {
     throw new Error(`🚑 createBoard Error: ${boardError.message}`);
   }
 
-  useBoardStore.getState().updateBoard(boardData);
-  log.info(`✅📋 New Board created: ${boardData.id}`);
+  if (!boardData) {
+    throw new Error("🚑 createBoard Error: Board data is null");
+  }
+
+  log.info(`✅📋 createBoard: ${boardData.id}`);
 
   const { error: junctionError } = await supabase
     .from(DBTable.User_Board)
@@ -67,18 +70,20 @@ async function createBoard(userId: string): Promise<Board> {
   return boardData;
 }
 
-async function fetchBoardById(boardId: string): Promise<Board> {
+async function fetchBoardById(boardId: string): Promise<Board | null> {
   const { data, error } = await supabase
     .from(DBTable.Board)
     .select("id, name, transform")
     .eq("id", boardId)
-    .single();
+    .maybeSingle();
 
   if (error) {
     throw new Error(`🚑 fetchBoardById Error: ${error.message}`);
   }
 
-  log.info(`✅📋 Board fetched by ID: ${JSON.stringify(data)}`);
+  log.info(
+    `✅📋 fetchBoardById: ${data ? JSON.stringify(data) : "No board found"}`
+  );
 
   return data;
 }
