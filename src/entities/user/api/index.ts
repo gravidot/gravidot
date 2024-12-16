@@ -28,10 +28,14 @@ export async function createUser(): Promise<GravidotActiveUser> {
     .from(DBTable.GravidotUser)
     .insert([{ uid: user.uid, name: user.name, created_at: now }])
     .select()
-    .single();
+    .maybeSingle();
 
   if (createNewUserError) {
     throw new Error(`🚑 createUser 🗯️ ${createNewUserError.message}`);
+  }
+
+  if (!newUser) {
+    throw new Error(`🚑 createUser 🗯️ ${newUser}`);
   }
 
   log.info(`✅😃 createUser 🗯️`, newUser);
