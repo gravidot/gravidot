@@ -1,10 +1,12 @@
 import { useBoardStore } from "@/entities/board/store";
 import { createNode, deleteNode, updateNodeShape } from "@/entities/node/api";
+import { DotNode } from "@/entities/node/model";
 import { Shape } from "@/entities/node/model/shape";
 import { useNodesStore } from "@/entities/node/store";
 import { useDebounceCallback } from "@/shared/hooks/useDebounce";
 import { useGesture } from "@use-gesture/react";
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
+import { useMultiTouch } from "./useMultiTouch";
 
 const DOUBLE_CLICK_TIME_THRESHOLD = 250;
 const LONG_PRESS_THRESHOLD = 500;
@@ -37,6 +39,62 @@ export const useShapeGestures = ({
   const boardId = useBoardStore((state) => state.id);
   const transform = useBoardStore((state) => state.transform);
   const nodes = useNodesStore((state) => state.nodes);
+
+  const updateShape = (index: number, updates: Partial<Shape>) => {
+    setShapes((prev) =>
+      prev.map((shape, i) => {
+        if (i === index) {
+          if (updates.scale !== undefined) {
+            shape.setScale(updates.scale);
+          }
+          if (updates.rotation !== undefined) {
+            shape.setRotate(updates.rotation);
+          }
+          if (updates.position) {
+            shape.setPosition(updates.position.x, updates.position.y);
+          }
+        }
+        return shape;
+      })
+    );
+
+    const node: DotNode = nodes[index];
+
+    if (node?.id) {
+      debouncedUpdateNodeShape(node.id, { ...shapes[index] });
+    }
+  };
+
+  const debouncedUpdateNodeShape = useDebounceCallback(async (id, updates) => {
+    if (!isActive) return;
+
+    if (!isDeletedShape.current) {
+      await updateNodeShape(id, { ...updates });
+    }
+  }, 500);
+
+  const { handleTouchMove, handleTouchEnd, touchPoints } = useMultiTouch(
+    isActive,
+    selectedShapeIndex,
+    updateShape
+  );
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    canvas.addEventListener("touchmove", handleTouchMove);
+    canvas.addEventListener("touchend", handleTouchEnd);
+    canvas.addEventListener("touchcancel", handleTouchEnd);
+
+    return () => {
+      canvas.removeEventListener("touchmove", handleTouchMove);
+      canvas.removeEventListener("touchend", handleTouchEnd);
+      canvas.removeEventListener("touchcancel", handleTouchEnd);
+    };
+  }, [handleTouchMove, handleTouchEnd, isActive, canvasRef]);
 
   const isTouchDevice = useCallback(
     () => "ontouchstart" in window || navigator.maxTouchPoints > 0,
@@ -142,14 +200,6 @@ export const useShapeGestures = ({
       }
     }
   };
-
-  const debouncedUpdateNodeShape = useDebounceCallback(async (id, updates) => {
-    if (!isActive) return;
-
-    if (!isDeletedShape.current) {
-      await updateNodeShape(id, { ...updates });
-    }
-  }, 500);
 
   const drawShapes = useCallback(
     (ctx: CanvasRenderingContext2D) => {
@@ -292,8 +342,7 @@ export const useShapeGestures = ({
       },
 
       onDrag: ({ movement: [mx, my] }) => {
-        if (!isActive) return;
-        if (draggingIndex === null) return;
+        if (!isActive || draggingIndex === null) return;
 
         if (isTouchDevice()) {
           isDeletedShape.current = false;
@@ -324,20 +373,7 @@ export const useShapeGestures = ({
           y: initialPosition.y + my,
         };
 
-        setShapes((prev) =>
-          prev.map((shape, i) => {
-            if (i === draggingIndex) {
-              shape.setPosition(newPosition.x, newPosition.y);
-              return shape;
-            }
-            return shape;
-          })
-        );
-
-        const node = nodes[draggingIndex];
-        if (node?.id && (mx !== 0 || my !== 0)) {
-          debouncedUpdateNodeShape(node.id, { position: newPosition });
-        }
+        updateShape(draggingIndex, { position: newPosition });
       },
 
       onDragEnd: () => {
@@ -356,5 +392,6 @@ export const useShapeGestures = ({
     shapes,
     selectedShapeIndex,
     updateShapeContent,
+    touchPoints,
   };
 };

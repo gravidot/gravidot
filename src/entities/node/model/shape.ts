@@ -11,6 +11,8 @@ export class Shape {
   color: Color;
   content: string;
   isEditing: boolean = false;
+  scale: number = 1;
+  rotation: number = 0;
 
   constructor({
     position,
@@ -18,18 +20,24 @@ export class Shape {
     color = getRandomValue(ColorType)().value,
     vertex = getRandomValue(Vertex)().value,
     content = "Touch Idea!",
+    scale = 1,
+    rotation = 0,
   }: {
     position: Position;
     size?: Size;
     color?: Color;
     vertex?: number;
     content?: string;
+    scale?: number;
+    rotation?: number;
   }) {
     this.position = position;
     this.size = size;
     this.color = color;
     this.vertex = vertex;
     this.content = content;
+    this.scale = scale;
+    this.rotation = rotation;
   }
 
   draw({
@@ -71,6 +79,8 @@ export class Shape {
     const fixedY = this.position.y / transform.zoomScale;
 
     ctx.translate(fixedX, fixedY);
+    ctx.rotate(this.rotation);
+    ctx.scale(this.scale, this.scale);
   }
 
   private drawShape(ctx: CanvasRenderingContext2D, transform: BoardTransform) {
@@ -204,5 +214,13 @@ export class Shape {
   setPosition(newX: number, newY: number) {
     this.position.x = newX;
     this.position.y = newY;
+  }
+
+  setScale(newScale: number) {
+    this.scale = newScale;
+  }
+
+  setRotate(angleInDegrees: number) {
+    this.rotation = (angleInDegrees * Math.PI) / 180;
   }
 }

@@ -27,6 +27,8 @@ const mockContext = {
   beginPath: jest.fn(),
   arc: jest.fn(),
   rect: jest.fn(),
+  rotate: jest.fn(),
+  scale: jest.fn(),
   moveTo: jest.fn(),
   lineTo: jest.fn(),
   closePath: jest.fn(),

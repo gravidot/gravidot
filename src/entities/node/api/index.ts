@@ -1,6 +1,5 @@
 import { DBTable, supabase } from "@/shared/api/supabaseClient";
 import log from "@/shared/log";
-import { Position } from "../model";
 import { Shape } from "../model/shape";
 import { useNodesStore } from "../store";
 
@@ -61,7 +60,7 @@ export async function deleteNode(nodeId: string): Promise<void> {
 
 export async function updateNodeShape(
   nodeId: string,
-  updates: Partial<{ position: Position; content: string }>
+  updates: Partial<Shape>
 ): Promise<void> {
   const { data: currentNode, error: fetchError } = await supabase
     .from(DBTable.DotNode)
