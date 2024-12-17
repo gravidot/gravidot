@@ -94,24 +94,27 @@ export class Shape {
   private drawShape(ctx: CanvasRenderingContext2D, transform: BoardTransform) {
     ctx.fillStyle = this.color.fill;
 
-    const radius = this.size.w * transform.zoomScale;
+    const width = this.size.w * transform.zoomScale;
+    const height = this.size.h * transform.zoomScale;
 
     if (this.vertex === Vertex.circle) {
       ctx.beginPath();
-      ctx.arc(0, 0, radius * 0.8, 0, 2 * Math.PI);
+      ctx.arc(0, 0, width * 0.8, 0, 2 * Math.PI);
     } else if (this.vertex === Vertex.square) {
-      const halfSide = radius / Math.sqrt(2);
+      const halfSideW = width / Math.sqrt(2);
+      const halfSideH = height / Math.sqrt(2);
       ctx.beginPath();
-      ctx.rect(-halfSide, -halfSide, 2 * halfSide, 2 * halfSide);
+      ctx.rect(-halfSideW, -halfSideH, 2 * halfSideW, 2 * halfSideH);
     } else if (this.vertex === Vertex.star) {
-      this.drawStar(ctx, radius);
+      this.drawStar(ctx, width);
     } else {
-      const angle = (2 * Math.PI) / Math.min(this.vertex, 6);
-      ctx.beginPath();
+      const sides = Math.min(this.vertex, 6);
+      const angle = (2 * Math.PI) / sides;
 
-      for (let i = 0; i < this.vertex; i++) {
-        const x = radius * 0.9 * Math.cos(angle * i);
-        const y = radius * 0.9 * Math.sin(angle * i);
+      ctx.beginPath();
+      for (let i = 0; i < sides; i++) {
+        const x = width * 0.9 * Math.cos(angle * i);
+        const y = height * 0.9 * Math.sin(angle * i);
         if (i === 0) {
           ctx.moveTo(x, y);
         } else {
@@ -234,5 +237,10 @@ export class Shape {
 
   setVertex(newVertex: VertexType) {
     this.vertex = newVertex;
+  }
+
+  setSize(newW: number, newH: number) {
+    this.size.w = newW;
+    this.size.h = newH;
   }
 }

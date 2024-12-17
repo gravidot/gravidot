@@ -84,6 +84,34 @@ export function useMultiTouch(
         }
 
         updateShape(selectedShapeIndex, { vertex: selectedVertex });
+      } else if (touchCount === 4) {
+        const [touch1, touch2, touch3, touch4] = event.touches;
+
+        setTouchPoints([
+          { x: touch1.clientX, y: touch1.clientY },
+          { x: touch2.clientX, y: touch2.clientY },
+          { x: touch3.clientX, y: touch3.clientY },
+          { x: touch4.clientX, y: touch4.clientY },
+        ]);
+
+        const points = [
+          { x: touch1.clientX, y: touch1.clientY },
+          { x: touch2.clientX, y: touch2.clientY },
+          { x: touch3.clientX, y: touch3.clientY },
+          { x: touch4.clientX, y: touch4.clientY },
+        ];
+
+        const minX = Math.min(...points.map((point) => point.x));
+        const maxX = Math.max(...points.map((point) => point.x));
+        const minY = Math.min(...points.map((point) => point.y));
+        const maxY = Math.max(...points.map((point) => point.y));
+
+        const size = {
+          w: Math.max(100, (maxX - minX) / 2),
+          h: Math.max(100, maxY - minY),
+        };
+
+        updateShape(selectedShapeIndex, { size });
       }
     },
     [isActive, selectedShapeIndex, updateShape]

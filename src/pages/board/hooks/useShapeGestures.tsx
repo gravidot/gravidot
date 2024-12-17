@@ -56,6 +56,9 @@ export const useShapeGestures = ({
           if (updates.vertex !== undefined) {
             shape.setVertex(updates.vertex);
           }
+          if (updates.size !== undefined) {
+            shape.setSize(updates.size.w, updates.size.h);
+          }
         }
         return shape;
       })
