@@ -1,20 +1,21 @@
 "use client";
 
-import { useShapeGestures } from "@/pages/board/hooks/useShapeGestures";
+import { Shape } from "@/entities/node/model/shape";
 import { RefObject } from "react";
 
 export function Canvas({
   canvasRef,
   textareaRef,
+  shapes,
+  selectedShapeIndex,
+  updateShapeContent,
 }: {
   canvasRef: RefObject<HTMLCanvasElement>;
   textareaRef: RefObject<HTMLTextAreaElement>;
+  shapes: Shape[];
+  selectedShapeIndex: number | null;
+  updateShapeContent: (content: string) => void;
 }) {
-  const { shapes, selectedShapeIndex, updateShapeContent } = useShapeGestures({
-    canvasRef,
-    textareaRef,
-  });
-
   return (
     <>
       <canvas

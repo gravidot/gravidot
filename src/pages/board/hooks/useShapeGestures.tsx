@@ -11,9 +11,11 @@ const LONG_PRESS_THRESHOLD = 500;
 const DRAG_REPEAT_THRESHOLD = 8;
 
 export const useShapeGestures = ({
+  isActive,
   canvasRef,
   textareaRef,
 }: {
+  isActive: boolean;
   canvasRef: RefObject<HTMLCanvasElement>;
   textareaRef: RefObject<HTMLTextAreaElement>;
 }) => {
@@ -22,7 +24,6 @@ export const useShapeGestures = ({
   const [selectedShapeIndex, setSelectedShapeIndex] = useState<number | null>(
     null
   );
-  const [currentText, setCurrentText] = useState<string>("");
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
   const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
 
@@ -44,9 +45,9 @@ export const useShapeGestures = ({
 
   const findClickedShapeIndex = useCallback(
     (clientX: number, clientY: number) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return null;
+      if (!isActive || !canvasRef.current) return null;
 
+      const canvas = canvasRef.current;
       const clickX = clientX - canvas.offsetLeft;
       const clickY = clientY - canvas.offsetTop;
 
@@ -58,11 +59,11 @@ export const useShapeGestures = ({
           clickY <= shape.position.y + shape.size.h
       );
     },
-    [canvasRef, shapes]
+    [canvasRef, shapes, isActive]
   );
 
   const handleUndo = useCallback(() => {
-    if (deletedShapesHistory.current.length === 0) return;
+    if (!isActive || deletedShapesHistory.current.length === 0) return;
 
     const { shape, index } = deletedShapesHistory.current.pop()!;
     setShapes((prev) => {
@@ -70,10 +71,12 @@ export const useShapeGestures = ({
       newShapes.splice(index, 0, shape);
       return newShapes;
     });
-  }, []);
+  }, [isActive]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
+      if (!isActive) return;
+
       const isUndoShortcut =
         (event.ctrlKey && event.key === "z") ||
         (event.metaKey && event.key === "z");
@@ -83,11 +86,13 @@ export const useShapeGestures = ({
         handleUndo();
       }
     },
-    [handleUndo]
+    [handleUndo, isActive]
   );
 
   const handleDelete = useCallback(
     async (index: number) => {
+      if (!isActive) return;
+
       const nodeToDelete = nodes[index];
 
       if (nodeToDelete?.id) {
@@ -99,11 +104,13 @@ export const useShapeGestures = ({
         await deleteNode(nodeToDelete.id);
       }
     },
-    [nodes, shapes]
+    [nodes, shapes, isActive]
   );
 
   const handleDeleteKey = useCallback(
     (event: KeyboardEvent) => {
+      if (!isActive) return;
+
       if (
         selectedShapeIndex !== null &&
         textareaRef.current !== document.activeElement &&
@@ -113,11 +120,11 @@ export const useShapeGestures = ({
         handleDelete(selectedShapeIndex);
       }
     },
-    [selectedShapeIndex, handleDelete, textareaRef]
+    [selectedShapeIndex, handleDelete, textareaRef, isActive]
   );
 
   const updateShapeContent = (text: string) => {
-    setCurrentText(text);
+    if (!isActive) return;
 
     if (selectedShapeIndex !== null) {
       setShapes((prevShapes) =>
@@ -137,6 +144,8 @@ export const useShapeGestures = ({
   };
 
   const debouncedUpdateNodeShape = useDebounceCallback(async (id, updates) => {
+    if (!isActive) return;
+
     if (!isDeletedShape.current) {
       await updateNodeShape(id, { ...updates });
     }
@@ -144,6 +153,8 @@ export const useShapeGestures = ({
 
   const drawShapes = useCallback(
     (ctx: CanvasRenderingContext2D) => {
+      if (!isActive) return;
+
       ctx.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
 
       shapes.forEach((shape, index) => {
@@ -154,14 +165,18 @@ export const useShapeGestures = ({
         });
       });
     },
-    [shapes, selectedShapeIndex, canvasRef, transform]
+    [shapes, selectedShapeIndex, canvasRef, transform, isActive]
   );
 
   useEffect(() => {
+    if (!isActive) return;
+
     setShapes(nodes.map(({ shape }) => new Shape(shape)));
-  }, [nodes]);
+  }, [nodes, isActive]);
 
   useEffect(() => {
+    if (!isActive) return;
+
     if (ctx) {
       drawShapes(ctx);
     }
@@ -173,13 +188,17 @@ export const useShapeGestures = ({
       document.removeEventListener("keyup", handleDeleteKey);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [ctx, drawShapes, handleDeleteKey, handleKeyDown]);
+  }, [ctx, drawShapes, handleDeleteKey, handleKeyDown, isActive]);
 
   useEffect(() => {
+    if (!isActive) return;
+
     handleUndo();
-  }, [handleUndo]);
+  }, [handleUndo, isActive]);
 
   useEffect(() => {
+    if (!isActive) return;
+
     const canvas = canvasRef.current;
     if (canvas) {
       const dpr = window.devicePixelRatio || 1;
@@ -195,11 +214,12 @@ export const useShapeGestures = ({
         setCtx(context);
       }
     }
-  }, [canvasRef]);
+  }, [canvasRef, isActive]);
 
   useGesture(
     {
       onMouseDown: async (event) => {
+        if (!isActive) return;
         const now = performance.now();
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -215,7 +235,6 @@ export const useShapeGestures = ({
           setShapes((prev) => [...prev, newShape]);
           await createNode(boardId, newShape);
           setSelectedShapeIndex(shapes.length);
-          setCurrentText("");
           textareaRef.current?.focus();
           return;
         }
@@ -238,18 +257,21 @@ export const useShapeGestures = ({
       },
 
       onMouseUp: () => {
+        if (!isActive) return;
         if (longPressTimer.current) {
           clearTimeout(longPressTimer.current);
         }
       },
 
       onMouseLeave: () => {
+        if (!isActive) return;
         if (longPressTimer.current) {
           clearTimeout(longPressTimer.current);
         }
       },
 
       onDragStart: ({ xy: [x, y] }) => {
+        if (!isActive) return;
         dragCount.current = 0;
 
         if (longPressTimer.current) {
@@ -264,13 +286,13 @@ export const useShapeGestures = ({
             x: shapes[index].position.x,
             y: shapes[index].position.y,
           });
-          setCurrentText(shapes[index].content);
         } else {
           setSelectedShapeIndex(null);
         }
       },
 
       onDrag: ({ movement: [mx, my] }) => {
+        if (!isActive) return;
         if (draggingIndex === null) return;
 
         if (isTouchDevice()) {
@@ -319,6 +341,7 @@ export const useShapeGestures = ({
       },
 
       onDragEnd: () => {
+        if (!isActive) return;
         setDraggingIndex(null);
       },
     },
@@ -331,10 +354,7 @@ export const useShapeGestures = ({
 
   return {
     shapes,
-    setShapes,
     selectedShapeIndex,
-    currentText,
     updateShapeContent,
-    handleDeleteKey,
   };
 };

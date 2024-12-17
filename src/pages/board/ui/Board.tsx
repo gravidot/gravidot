@@ -5,8 +5,10 @@ import { fetchNodesByBoardId } from "@/entities/node/api";
 import { Background } from "@/features/background";
 import { Canvas } from "@/features/canvas";
 import { Controls } from "@/features/controls";
-import { useBoardGestures } from "@/pages/board/hooks/useBoardGestures";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useShapeGestures } from "../hooks/useShapeGestures";
+import { GestureMode } from "../types";
+import { useBoardGestures } from "../hooks/useBoardGestures";
 
 export function BoardPage() {
   const ref = useRef<HTMLDivElement>(null);
@@ -14,7 +16,11 @@ export function BoardPage() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const boardId = useBoardStore.getState().id;
 
-  const { cursor } = useBoardGestures({ ref });
+  const [mode, setMode] = useState<GestureMode>("shape");
+
+  const onModeChange = () => {
+    setMode((prev) => (prev === "board" ? "shape" : "board"));
+  };
 
   useEffect(() => {
     if (boardId) {
@@ -22,11 +28,28 @@ export function BoardPage() {
     }
   }, [boardId]);
 
+  const { shapes, selectedShapeIndex, updateShapeContent } = useShapeGestures({
+    isActive: mode === "shape",
+    canvasRef,
+    textareaRef,
+  });
+
+  const { cursor } = useBoardGestures({
+    isActive: mode === "board",
+    ref,
+  });
+
   return (
     <>
-      <Controls />
+      <Controls mode={mode} onModeChange={onModeChange} />
       <div ref={ref} className={`h-dvh w-dvw touch-none ${cursor}`}>
-        <Canvas canvasRef={canvasRef} textareaRef={textareaRef} />
+        <Canvas
+          canvasRef={canvasRef}
+          textareaRef={textareaRef}
+          shapes={shapes}
+          selectedShapeIndex={selectedShapeIndex}
+          updateShapeContent={updateShapeContent}
+        />
         <Background />
       </div>
     </>

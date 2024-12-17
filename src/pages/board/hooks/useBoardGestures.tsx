@@ -8,8 +8,10 @@ const MAX_ZOOM = 2.5;
 const SCROLL_SPEED = 0.02;
 
 export const useBoardGestures = ({
+  isActive,
   ref,
 }: {
+  isActive: boolean;
   ref: RefObject<HTMLDivElement>;
 }) => {
   const setTransform = useBoardStore(useShallow((state) => state.setTransform));
@@ -19,30 +21,31 @@ export const useBoardGestures = ({
   useGesture(
     {
       onMouseDown: ({ event }) => {
+        if (!isActive) return;
         if (event.button === 1 && event.buttons === 4) {
           setCursor("cursor-grab");
           setIsWheelClick(true);
-          return;
         }
       },
 
       onMouseMove: ({ event }) => {
-        if (isWheelClick) {
-          setCursor("cursor-grabbing");
-          setTransform((prev) => ({
-            ...prev,
-            x: event.clientX,
-            y: event.clientY,
-          }));
-        }
+        if (!isActive || !isWheelClick) return;
+        setCursor("cursor-grabbing");
+        setTransform((prev) => ({
+          ...prev,
+          x: event.clientX,
+          y: event.clientY,
+        }));
       },
 
       onMouseUp: () => {
+        if (!isActive) return;
         setCursor("cursor-auto");
         setIsWheelClick(false);
       },
 
       onPinch: ({ offset: [scale], origin: [originX, originY] }) => {
+        if (!isActive) return;
         setTransform((prevTransform) => {
           if (prevTransform.zoomScale > scale) {
             setCursor("cursor-zoom-out");
@@ -60,6 +63,7 @@ export const useBoardGestures = ({
       },
 
       onWheel: ({ movement: [mx, my] }) => {
+        if (!isActive) return;
         setCursor("cursor-grabbing");
         setTransform((prev) => ({
           ...prev,
@@ -69,6 +73,7 @@ export const useBoardGestures = ({
       },
 
       onWheelEnd: () => {
+        if (!isActive) return;
         setCursor("cursor-auto");
       },
     },
