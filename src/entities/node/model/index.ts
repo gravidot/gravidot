@@ -1,3 +1,10 @@
+import { Shape } from "./shape";
+
+export interface DotNode {
+  id?: string;
+  shape: Shape;
+}
+
 export const ColorType = {
   blue: { fill: "rgb(170, 235, 240)" },
   green: { fill: "rgb(215, 255, 165)" },

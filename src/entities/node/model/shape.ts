@@ -2,7 +2,7 @@ import { BoardTransform } from "@/entities/board/model";
 import { darkenColor } from "@/shared/utils/darkenColor";
 import { getRandomValue } from "@/shared/utils/getRandomValue";
 import { RefObject } from "react";
-import { Color, ColorType, Position, Shadow, Size, Vertex } from "../types";
+import { Color, ColorType, Position, Shadow, Size, Vertex } from "./index";
 
 export class Shape {
   position: Position;
@@ -198,14 +198,7 @@ export class Shape {
 
   setContent(ctx: CanvasRenderingContext2D, newContent: string) {
     this.content = newContent;
-
-    const lines = this.content.split("\n");
-    const lineHeight = 20;
-    const startY = -((lines.length - 1) * lineHeight) / 2;
-
-    lines.forEach((line, index) => {
-      ctx.fillText(line, 0, startY + index * lineHeight);
-    });
+    this.drawText(ctx);
   }
 
   setPosition(newX: number, newY: number) {

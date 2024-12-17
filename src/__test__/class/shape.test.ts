@@ -1,6 +1,6 @@
 import { BoardTransform } from "@/entities/board/model";
-import { Shape } from "@/entities/shape/model";
-import { ColorType, Position, Size, Vertex } from "@/entities/shape/types";
+import { ColorType, Position, Size, Vertex } from "@/entities/node/model";
+import { Shape } from "@/entities/node/model/shape";
 import { darkenColor } from "@/shared/utils/darkenColor";
 import { RefObject } from "react";
 
