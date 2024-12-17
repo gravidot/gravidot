@@ -243,4 +243,8 @@ export class Shape {
     this.size.w = newW;
     this.size.h = newH;
   }
+
+  setColor(newColor: Color) {
+    this.color = newColor;
+  }
 }

@@ -1,4 +1,4 @@
-import { Vertex } from "@/entities/node/model";
+import { ColorType, Vertex } from "@/entities/node/model";
 import { Shape } from "@/entities/node/model/shape";
 import { useCallback, useRef, useState } from "react";
 
@@ -12,12 +12,15 @@ export function useMultiTouch(
   const [touchPoints, setTouchPoints] = useState<{ x: number; y: number }[]>(
     []
   );
+  const activeTouchType = useRef<string | null>(null);
+  const endTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleTouchMove = useCallback(
     (event: TouchEvent) => {
       if (!isActive || selectedShapeIndex === null) return;
 
       const touchCount = event.touches.length;
+      activeTouchType.current = `${touchCount}touch`;
 
       if (touchCount === 2) {
         const [touch1, touch2] = event.touches;
@@ -112,15 +115,55 @@ export function useMultiTouch(
         };
 
         updateShape(selectedShapeIndex, { size });
+      } else if (touchCount === 5) {
+        const [touch1, touch2, touch3, touch4, touch5] = event.touches;
+
+        setTouchPoints([
+          { x: touch1.clientX, y: touch1.clientY },
+          { x: touch2.clientX, y: touch2.clientY },
+          { x: touch3.clientX, y: touch3.clientY },
+          { x: touch4.clientX, y: touch4.clientY },
+          { x: touch5.clientX, y: touch5.clientY },
+        ]);
+
+        const distance = Math.hypot(
+          touch5.clientX - touch1.clientX,
+          touch5.clientY - touch1.clientY
+        );
+
+        let selectedColor;
+
+        if (distance < 300) {
+          selectedColor = ColorType.blue;
+        } else if (distance < 340) {
+          selectedColor = ColorType.green;
+        } else if (distance < 380) {
+          selectedColor = ColorType.pink;
+        } else if (distance < 420) {
+          selectedColor = ColorType.purple;
+        } else if (distance < 460) {
+          selectedColor = ColorType.yellow;
+        } else {
+          selectedColor = ColorType.transparent;
+        }
+
+        updateShape(selectedShapeIndex, { color: selectedColor });
       }
     },
     [isActive, selectedShapeIndex, updateShape]
   );
 
-  const handleTouchEnd = useCallback(() => {
-    initialDistance.current = null;
-    initialAngle.current = null;
-    setTouchPoints([]);
+  const handleTouchEnd = useCallback((event: TouchEvent) => {
+    if (endTimer.current) {
+      clearTimeout(endTimer.current);
+    }
+
+    endTimer.current = setTimeout(() => {
+      initialDistance.current = null;
+      initialAngle.current = null;
+      setTouchPoints([]);
+      activeTouchType.current = null;
+    }, 300);
   }, []);
 
   return { handleTouchMove, handleTouchEnd, touchPoints };

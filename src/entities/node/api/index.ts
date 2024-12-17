@@ -90,6 +90,6 @@ export async function updateNodeShape(
     throw new Error(`🚑 updateNodeShape Error: ${updateError.message}`);
   }
 
-  useNodesStore.getState().updateNodeShape(nodeId, updates);
+  useNodesStore.getState().updateNodeShape(nodeId, updatedShape);
   log.info(`✅📍 Node ${nodeId} updated to: ${JSON.stringify(updates)}`);
 }

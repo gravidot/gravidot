@@ -59,6 +59,9 @@ export const useShapeGestures = ({
           if (updates.size !== undefined) {
             shape.setSize(updates.size.w, updates.size.h);
           }
+          if (updates.color !== undefined) {
+            shape.setColor(updates.color);
+          }
         }
         return shape;
       })
