@@ -2,12 +2,20 @@ import { BoardTransform } from "@/entities/board/model";
 import { darkenColor } from "@/shared/utils/darkenColor";
 import { getRandomValue } from "@/shared/utils/getRandomValue";
 import { RefObject } from "react";
-import { Color, ColorType, Position, Shadow, Size, Vertex } from "./index";
+import {
+  Color,
+  ColorType,
+  Position,
+  Shadow,
+  Size,
+  Vertex,
+  VertexType,
+} from "./index";
 
 export class Shape {
   position: Position;
   size: Size;
-  vertex: number;
+  vertex: VertexType;
   color: Color;
   content: string;
   isEditing: boolean = false;
@@ -26,7 +34,7 @@ export class Shape {
     position: Position;
     size?: Size;
     color?: Color;
-    vertex?: number;
+    vertex?: VertexType;
     content?: string;
     scale?: number;
     rotation?: number;
@@ -222,5 +230,9 @@ export class Shape {
 
   setRotate(angleInDegrees: number) {
     this.rotation = (angleInDegrees * Math.PI) / 180;
+  }
+
+  setVertex(newVertex: VertexType) {
+    this.vertex = newVertex;
   }
 }

@@ -1,3 +1,4 @@
+import { Vertex } from "@/entities/node/model";
 import { Shape } from "@/entities/node/model/shape";
 import { useCallback, useRef, useState } from "react";
 
@@ -20,6 +21,7 @@ export function useMultiTouch(
 
       if (touchCount === 2) {
         const [touch1, touch2] = event.touches;
+
         setTouchPoints([
           { x: touch1.clientX, y: touch1.clientY },
           { x: touch2.clientX, y: touch2.clientY },
@@ -48,6 +50,40 @@ export function useMultiTouch(
           ((currentAngle - initialAngle.current) * 180) / Math.PI;
 
         updateShape(selectedShapeIndex, { scale, rotation });
+      } else if (touchCount === 3) {
+        const [touch1, touch2, touch3] = event.touches;
+
+        setTouchPoints([
+          { x: touch1.clientX, y: touch1.clientY },
+          { x: touch2.clientX, y: touch2.clientY },
+          { x: touch3.clientX, y: touch3.clientY },
+        ]);
+
+        const angleRad = Math.atan2(
+          touch3.clientY - touch1.clientY,
+          touch3.clientX - touch1.clientX
+        );
+
+        let angleDeg = Math.abs(((angleRad * 180) / Math.PI) % 360);
+
+        if (angleDeg > 30) {
+          angleDeg = 30;
+        }
+
+        let selectedVertex;
+        if (angleDeg <= 6) {
+          selectedVertex = Vertex.circle;
+        } else if (angleDeg <= 12) {
+          selectedVertex = Vertex.square;
+        } else if (angleDeg <= 18) {
+          selectedVertex = Vertex.pentagon;
+        } else if (angleDeg <= 24) {
+          selectedVertex = Vertex.hexagon;
+        } else {
+          selectedVertex = Vertex.star;
+        }
+
+        updateShape(selectedShapeIndex, { vertex: selectedVertex });
       }
     },
     [isActive, selectedShapeIndex, updateShape]

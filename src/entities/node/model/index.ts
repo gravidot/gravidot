@@ -24,6 +24,8 @@ export const Vertex = {
   star: 10,
 } as const;
 
+export type VertexType = (typeof Vertex)[keyof typeof Vertex];
+
 export const Shadow = {
   shadowColor: "rgba(200, 200, 200, 0.2)",
   offsetX: 0,

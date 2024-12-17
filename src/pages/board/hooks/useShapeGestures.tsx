@@ -53,6 +53,9 @@ export const useShapeGestures = ({
           if (updates.position) {
             shape.setPosition(updates.position.x, updates.position.y);
           }
+          if (updates.vertex !== undefined) {
+            shape.setVertex(updates.vertex);
+          }
         }
         return shape;
       })

@@ -42,7 +42,7 @@ export function TouchPoint({
                 : LIGHT_MODE,
             }}
           >
-            {`#${index}`}
+            {`#${index + 1}`}
           </text>
         </g>
       ))}
