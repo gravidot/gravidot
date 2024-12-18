@@ -153,7 +153,7 @@ export function useMultiTouch(
     [isActive, selectedShapeIndex, updateShape]
   );
 
-  const handleTouchEnd = useCallback((event: TouchEvent) => {
+  const handleTouchEnd = useCallback(() => {
     if (endTimer.current) {
       clearTimeout(endTimer.current);
     }
