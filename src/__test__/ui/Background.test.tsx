@@ -20,7 +20,20 @@ describe("<Background /> Component", () => {
     expect(circle).toBeInTheDocument();
   });
 
-  it("BackgroundPattern.Lines 패턴일 때는, pattern 을 path 로 격자무늬를 그려야 한다.", () => {
+  it("BackgroundPattern.Lines 패턴일 때는, pattern을 path로 격자무늬를 그려야 한다.", () => {
+    window.matchMedia = jest.fn().mockImplementation((query) => {
+      return {
+        matches: false, // 라이트 모드로 설정
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      };
+    });
+
     const { container } = render(
       <Background pattern={BackgroundPattern.Lines} gap={30} lineWidth={2} />
     );
