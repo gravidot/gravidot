@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Gravidot: A brainstorming tool with multi-touch 🗯️🤏🎶",
   description:
     "A brainstorming and mind mapping service that connects ideas and supports real-time collaboration with an intuitive multi-touch interface.",
+  icons: {
+    icon: "./favicon.ico",
+  },
 };
 
 export default function RootLayout({
