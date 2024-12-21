@@ -1,7 +1,7 @@
 import { BackgroundPattern } from "@/features/background/types";
 import { CircleIcon } from "@/shared/components/CircleIcon";
 import { ControlButton } from "@/shared/components/ControlButton";
-import { LineIcon } from "@/shared/components/RectIcon";
+import { LineIcon } from "@/shared/components/LineIcon";
 
 export default function BackgroundPatternToggle({
   pattern,
