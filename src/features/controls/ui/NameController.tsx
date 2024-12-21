@@ -3,7 +3,7 @@
 import { fetchBoardsByUserId, updateBoard } from "@/entities/board/api";
 import { useBoardStore } from "@/entities/board/store";
 import { useUserStore } from "@/entities/user/store";
-import { ControlInput } from "@/shared/components/ControlInput";
+import { ControlInput } from "@/shared/ui/ControlInput";
 import { useClickOutsideBlur } from "@/shared/hooks/useClickOutsideBlur";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { useMeasureInputWidth } from "@/shared/hooks/useMeasureInputWidth";

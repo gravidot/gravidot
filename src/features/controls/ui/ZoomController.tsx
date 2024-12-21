@@ -1,7 +1,7 @@
 "use client";
 
 import { useBoardStore } from "@/entities/board/store";
-import { ControlButton } from "@/shared/components/ControlButton";
+import { ControlButton } from "@/shared/ui/ControlButton";
 import { memo, useCallback, useEffect, useState } from "react";
 
 const scaleOptions = [2, 1.25, 1, 0.75, 0.5];

@@ -4,7 +4,7 @@ import { fetchOrCreateBoard } from "@/entities/board/api";
 import { Board } from "@/entities/board/model";
 import { useBoardStore } from "@/entities/board/store";
 import { createUser } from "@/entities/user/api";
-import { Loading } from "@/shared/components/Loading";
+import { Loading } from "@/shared/ui/Loading";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 

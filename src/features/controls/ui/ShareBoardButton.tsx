@@ -1,6 +1,6 @@
-import { ControlButton } from "@/shared/components/ControlButton";
-import { ShareIcon } from "@/shared/components/ShareIcon";
-import { Snackbar } from "@/shared/components/Snackbar";
+import { ControlButton } from "@/shared/ui/ControlButton";
+import { ShareIcon } from "@/shared/ui/ShareIcon";
+import { Snackbar } from "@/shared/ui/Snackbar";
 import { useCopyWithClipboard } from "@/shared/hooks/copyWithClipboard";
 import { usePathname } from "next/navigation";
 

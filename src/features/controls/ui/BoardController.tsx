@@ -4,8 +4,8 @@ import { fetchBoardsByUserId, fetchOrCreateBoard } from "@/entities/board/api";
 import { Board } from "@/entities/board/model";
 import { useBoardStore } from "@/entities/board/store";
 import { useUserStore } from "@/entities/user/store";
-import { ActivatedCircle } from "@/shared/components/ActivatedCircle";
-import { PlusButton } from "@/shared/components/PlusButton";
+import { ActivatedCircle } from "@/shared/ui/ActivatedCircle";
+import { PlusButton } from "@/shared/ui/PlusButton";
 import { useClickOutsideBlur } from "@/shared/hooks/useClickOutsideBlur";
 import {
   extractPrefixWithDash,

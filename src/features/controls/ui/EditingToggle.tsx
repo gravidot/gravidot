@@ -1,9 +1,9 @@
 "use client";
 
-import { GestureMode } from "@/pages/board/types";
-import { ControlButton } from "@/shared/components/ControlButton";
-import { EditedBoardIcon } from "@/shared/components/EditedBoardIcon";
-import { EditedNodeIcon } from "@/shared/components/EditedNodeIcon";
+import { GestureMode } from "@/views/board/types";
+import { ControlButton } from "@/shared/ui/ControlButton";
+import { EditedBoardIcon } from "@/shared/ui/EditedBoardIcon";
+import { EditedNodeIcon } from "@/shared/ui/EditedNodeIcon";
 
 export default function EditingToggle({
   mode,

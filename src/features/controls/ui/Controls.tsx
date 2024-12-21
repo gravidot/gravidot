@@ -1,5 +1,5 @@
 import { BackgroundPattern } from "@/features/background/types";
-import { GestureMode } from "@/pages/board/types";
+import { GestureMode } from "@/views/board/types";
 import BackgroundPatternToggle from "./BackgroundPatternToggle";
 import { BoardController } from "./BoardController";
 import { DeleteAllCacheButton } from "./DeleteAllCacheButton";

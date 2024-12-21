@@ -1,8 +1,8 @@
 import { useBoardStore } from "@/entities/board/store";
 import { useNodesStore } from "@/entities/node/store";
 import { useUserStore } from "@/entities/user/store";
-import { ControlButton } from "@/shared/components/ControlButton";
-import { TrashIcon } from "@/shared/components/TrashIcon";
+import { ControlButton } from "@/shared/ui/ControlButton";
+import { TrashIcon } from "@/shared/ui/TrashIcon";
 import { clearAllStores } from "@/shared/utils/clearAllStores";
 import { useRouter } from "next/navigation";
 
