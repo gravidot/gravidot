@@ -36,7 +36,7 @@ export const useUserStore = create<UserState>()(
         }));
       },
 
-      clearUser: () => set({ ...initialState }),
+      clearUser: () => set({ uid: undefined, ...initialState }),
     }),
     {
       name: "user-storage",

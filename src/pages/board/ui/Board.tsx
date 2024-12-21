@@ -19,7 +19,7 @@ export function BoardPage() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const boardId = useBoardStore.getState().id;
 
-  const [mode, setMode] = useState<GestureMode>("board");
+  const [mode, setMode] = useState<GestureMode>("shape");
   const [backgroundPattern, setBackgroundPattern] = useState<BackgroundPattern>(
     BackgroundPattern.Dots
   );

@@ -121,3 +121,35 @@ export async function fetchBoardsByUserId(
 
   return data.flatMap((entry) => entry.board);
 }
+
+export async function addUserToBoardIfNotExists(
+  userId: string,
+  boardId: string
+): Promise<void> {
+  const { data: existingEntries, error: selectError } = await supabase
+    .from(DBTable.User_Board)
+    .select("user_id, board_id")
+    .eq("user_id", userId)
+    .eq("board_id", boardId);
+
+  if (selectError) {
+    throw new Error(`🚑 Select Error: ${selectError.message}`);
+  }
+
+  if (existingEntries && existingEntries.length > 0) {
+    log.info(
+      `✅📋😃 User ${userId} is already associated with board ${boardId}`
+    );
+    return;
+  }
+
+  const { error: insertError } = await supabase
+    .from(DBTable.User_Board)
+    .upsert([{ user_id: userId, board_id: boardId, role: Role.Editor }]);
+
+  if (insertError) {
+    throw new Error(`🚑 User Upsert Error: ${insertError.message}`);
+  }
+
+  log.info(`✅📋😃 User ${userId} successfully added to board ${boardId}`);
+}
