@@ -8,7 +8,6 @@ import { Canvas } from "@/features/canvas";
 import { Controls } from "@/features/controls";
 import { useEffect, useRef, useState } from "react";
 import { useBoardGestures } from "../hooks/useBoardGestures";
-import { useCheckAccess } from "../hooks/useCheckAccess";
 import { useShapeGestures } from "../hooks/useShapeGestures";
 import { GestureMode } from "../types";
 import { TouchPoint } from "./TouchPoint";
@@ -23,8 +22,6 @@ export function BoardPage() {
   const [backgroundPattern, setBackgroundPattern] = useState<BackgroundPattern>(
     BackgroundPattern.Dots
   );
-
-  useCheckAccess();
 
   const onModeChange = () => {
     setMode((prev) => (prev === "board" ? "shape" : "board"));
