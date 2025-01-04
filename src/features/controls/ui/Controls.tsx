@@ -1,5 +1,5 @@
-import { BackgroundPattern } from "@/features/background/types";
 import { GestureMode } from "@/views/board/types";
+import { BackgroundVariant } from "@xyflow/react";
 import BackgroundPatternToggle from "./BackgroundPatternToggle";
 import { BoardController } from "./BoardController";
 import { DeleteAllCacheButton } from "./DeleteAllCacheButton";
@@ -15,8 +15,8 @@ export function Controls({
 }: {
   mode: GestureMode;
   onModeChange: (mode: GestureMode) => void;
-  pattern: BackgroundPattern;
-  onPatternChange: (pattern: BackgroundPattern) => void;
+  pattern: BackgroundVariant;
+  onPatternChange: (pattern: BackgroundVariant) => void;
 }) {
   return (
     <>

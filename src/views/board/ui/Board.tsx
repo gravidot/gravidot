@@ -2,12 +2,10 @@
 
 import { useBoardStore } from "@/entities/board/store";
 import { fetchNodesByBoardId } from "@/entities/node/api";
-import { Background } from "@/features/background";
-import { BackgroundPattern } from "@/features/background/types";
 import { Canvas } from "@/features/canvas";
 import { Controls } from "@/features/controls";
+import { BackgroundVariant } from "@xyflow/react";
 import { useEffect, useRef, useState } from "react";
-import { useBoardGestures } from "../hooks/useBoardGestures";
 import { useShapeGestures } from "../hooks/useShapeGestures";
 import { GestureMode } from "../types";
 import { TouchPoint } from "./TouchPoint";
@@ -19,8 +17,8 @@ export function BoardPage() {
   const boardId = useBoardStore.getState().id;
 
   const [mode, setMode] = useState<GestureMode>("shape");
-  const [backgroundPattern, setBackgroundPattern] = useState<BackgroundPattern>(
-    BackgroundPattern.Dots
+  const [backgroundPattern, setBackgroundPattern] = useState<BackgroundVariant>(
+    BackgroundVariant.Dots
   );
 
   const onModeChange = () => {
@@ -29,9 +27,9 @@ export function BoardPage() {
 
   const onPatternChange = () => {
     setBackgroundPattern((prev) =>
-      prev === BackgroundPattern.Dots
-        ? BackgroundPattern.Lines
-        : BackgroundPattern.Dots
+      prev === BackgroundVariant.Dots
+        ? BackgroundVariant.Lines
+        : BackgroundVariant.Dots
     );
   };
 
@@ -48,11 +46,6 @@ export function BoardPage() {
       textareaRef,
     });
 
-  const { cursor } = useBoardGestures({
-    isActive: mode === "board",
-    ref,
-  });
-
   return (
     <>
       <Controls
@@ -61,7 +54,7 @@ export function BoardPage() {
         pattern={backgroundPattern}
         onPatternChange={onPatternChange}
       />
-      <div ref={ref} className={`h-dvh w-dvw touch-none ${cursor}`}>
+      <div ref={ref} className={`h-dvh w-dvw touch-none`}>
         <TouchPoint touchPoints={touchPoints} />
         <Canvas
           canvasRef={canvasRef}
@@ -70,7 +63,6 @@ export function BoardPage() {
           selectedShapeIndex={selectedShapeIndex}
           updateShapeContent={updateShapeContent}
         />
-        <Background pattern={backgroundPattern} />
       </div>
     </>
   );
