@@ -1,7 +1,13 @@
 # Gravidot
-[![display mode](https://github.com/user-attachments/assets/13101559-bd89-423c-8d33-a9b8d59b6bbe)](https://www.gravidot.com)
+
+![display mode](https://github.com/user-attachments/assets/50ed5291-c12a-4a9b-93e6-9fd37cec04db)
 
 <div align="center">
+
+### Play and share your ideas with multiple gestures!
+#### 멀티터치로 아이디어를 연결하고 실시간 협업이 가능한 브레인스토밍 서비스
+
+<br>
   
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fgravidot%2Fgravidot&count_bg=%2338A1FF&title_bg=%23141414&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://github.com/gravidot/gravidot)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fwww.gravidot.com&count_bg=%23FF641E&title_bg=%23000000&icon=livejournal.svg&icon_color=%23FFFFFF&title=Gravidot&edge_flat=false)](www.gravidot.com)
