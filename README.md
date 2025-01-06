@@ -23,7 +23,7 @@
   - [2. 보드 편집](#2.-보드-편집)
 - [기술 스택](#기술-스택)
 - [고민했던 부분](#고민했던-부분)
-  - [1. Canvas 기반의 도형 노드 편집](#1.-Canvas-기반의-도형-노드-편집)
+  - [1. 무한 캔버스의 백그라운드 그리드 구현](#1.-무한-캔버스의-백그라운드-그리드-구현)
   - [2. 멀티터치 hook 구현](#2.-멀티터치-hook-구현)
 
 <br>
@@ -51,9 +51,10 @@
 ![gravidot](https://github.com/user-attachments/assets/029d1eb4-dca5-4ac3-9cd2-79865b8bdb70)
 
 ### [2. 보드 편집모드](#목차)
+- 익명 로그인을 제공합니다. 사용자는 랜덤의 이름으로 보드를 이용할 수 있습니다.
+- 보드의 제목을 편집할 수 있고, 새로운 보드를 생성할 수 있습니다.
 
-
-
+![IMG_1258](https://github.com/user-attachments/assets/f0857451-a494-499d-91cf-884aced70373)
 
 <br>
 
@@ -69,302 +70,49 @@
 ![npm](https://img.shields.io/badge/npm-red?style=for-the-badge&logo=npm&logoColor=white)
 ![vercel](https://img.shields.io/badge/vercel-f0f0f0?style=for-the-badge&logo=vercel&logoColor=black)
 
-
-### 기술 스택 선정 및 이유
-- 플랫폼 — Web
-데스크톱/태블릿/모바일 모든 플랫폼에서도 브라우저 앱으로 접근할 수 있고 태블릿 사용자 편의성을 지원한다면 오프라인에서도 사용가능한 PWA 도 지원할 수도 있기 때문에 선정하게 되었습니다.
-
-- 언어 — typescript
-자바스크립트의 정적 타입을 지원하기 때문에, 이후 타입스크립트로 type 과 interface 설계를 더욱 용이하게 하고 더 쉽게 타입 오류를 잡을 수도 있기 때문에 선정했습니다. 휴먼에러나 타입에러를 런타임 시점까지 보내지 않고, 오류를 발견하는 사이클을 줄일 수 있습니다.
-
-- 프레임워크 — Next v15
-아무래도 React 와 비슷한 생태계이기 때문에 Next 를 사용할 때 러닝커브가 낮다고 판단했습니다.
-
-추후 더 업데이트 될 실시간 협업 페이지의 첫 로딩 속도가 중요하다고 판단했기 때문에, SSR을 지원하는 Next 를 도입해보려고 합니다. (TTFB (Time to First Byte)를 약간 증가시킬 수 있지만, 전체적인 FCP(First Contentful Paint)와 LCP(Largest Contentful Paint)가 개선될 수 있습니다) 추가적으로 브레인스토밍 템플릿을 지원한다면 이런 정적 데이터는 SSR를 통해 미리 렌더링하여 클라이언트에 빠르게 제공할 수 있기 때문에 Next 를 도입하기로 결정했습니다. 만약 이미지 파일을 import 하는 기능이 있을 때, Next 의 Image 컴포넌트를 사용해 이미지 자동 최적화를 지원받기 위해서 선정했습니다.
-
-- 그 외 라이브러리
-react-use-gesture : 멀티제스쳐 인터페이스를 지원해줍니다. 데스크탑 / 패드 / 모바일 웹에서 일어날 수 있는 모든 제스쳐 이벤트들을 테스트 코드를 거친 라이브러리를 도입하면 안정적으로 제스쳐를 핸들링할 수 있습니다. 또, 일반 브라우저 이벤트에는 없는 속도, 거리, 델타 등의 추가적인 kinematics(운동학적) 속성을 통해 업그레이드 된 제스처를 다룰 수 있습니다.
-
-- Baas(서비스형 백엔드(Backend as a Service)) — Superbase
-https://supabase.com/docs/guides/realtime 을 사용하면, 내부적으로 socket.io 서버를 superbase 에서 따로 지원을 해주므로, Vercel 로 배포가 가능합니다.
-
-- 번들링 — Turbopack (Next.js 12 이후 실험적 도입)
-Rust로 작성되어 훨씬 빠른 성능을 제공해줍니다. dev 모드에서 더욱 빠른 핫 리로딩(Hot Reloading) 속도를 지원합니다.
-
-- 테스트 도구: Jest / Playwright
-타입스크립트 단위 테스트를 진행하기 위해 Jest 를 선정했습니다. E2E 테스트가 필요하다고 생각했고, 원래 익숙했던 cypress 보다는 여러 장치와 브라우저에서 자동화된 UI 테스트를 진행해보고자 Playwright 를 선정했습니다.
-
-- 환경 버전 관리 — nvm use 20.18.0 = node@20.18.0
-Next 나 여러 다른 라이브러리가 node version 18+ 이상일 때, 지원해주기 때문입니다.
-
-- 상태관리 — Zustand
-단순하고 가벼운 (Redux 처럼 보일러플레이트가 많지 않음) API로 복잡한 상태를 효율적으로 관리할 수 있기 때문에 선정했습니다. 상태와 비동기 데이터 처리를 직관적으로 연동할 수 있습니다. Next 와 쉽게 통합 가능합니다.
-
-- 스타일링 — Tailwind CSS
-코드 수가 줄고 핵심 비지니스 로직에 스타일 코드가 침범하지 않는다는 장점을 활용할 수 있습니다. 다크모드나 반응형 디자인을 쉽게 구현할 수 있습니다. (이게 진짜 좋습니다..) PostCSS 와 같은 플러그인 기반의 툴과 잘 통합됩니다. autoprefixer가 css코드에 vender prefixes를 자동으로 추가해주어 브라우저 호환성 관리 용이합니다.
-
-- 배포 — Vercel
-
-Vercel 은 https://socket.io/how-to/use-with-nextjs 에서 적힌 이유로, WebSocket 을 지원하지 않기 때문에 AWS 로 배포하려 했으나, supabase realtime 을 활용하기로 결정하여 Vercel 배포가 가능하게 되었습니다.
-
-서버리스 플랫폼(Vercel, Netlify 등)은 서버리스 환경은 특정 요청만 처리하고 바로 종료되며, WebSocket 처럼 지속적인 연결을 유지하는 데 적합하지 않기 때문에, WebSocket 을 지원하지 않는 경우가 많습니다.
-
-- 형상관리도구 — git
-파일과 폴더로 협업하기 위해 버전관리 시스템 선택했습니다.
-
-- CI/CD — Github Action
-이미 github 을 사용하고 있어 github 과 Github Action의 통합으로 관리가 편하고, 무엇보다 간단하게 파이프라인을 작성할 수 있습니다. 직접 commit 할 때마다 prettier, lint, test 를 수동으로 하지 않아도 되기 때문입니다. 코드 변경 시 자동으로 테스트를 실행하여 기능이 깨지지 않도록 미리 테스트 해보려고 합니다. 그리고 가능하다면, 여러 장치와 브라우저에서 자동화된 UI 테스트 실행해보면 좋을 것 같습니다. on 스크립트에서 main 이나 dev 에 push/merge 되었을 때, 이벤트 시점을 정하여 자동배포할 수 있기 때문입니다.
-
-
 <br>
 
 ## [고민했던 부분](#목차)
-### [1. Canvas 기반의 도형 노드 편집](#목차)
+### [1. 무한 캔버스의 백그라운드 그리드 구현](#목차)
+무한 캔버스의 백그라운드 그리드를 구현하는 방법은 두 가지가 있습니다
 
-HTML5 Canvas 기반으로 직접 도형을 렌더링하고 위치, 크기, 색상, 회전 등 다양한 속성을 지원하는 Shape 클래스를 설계했습니다.
-라이브러리 없이 멀티터치 입력을 직접 처리해, 여러 손가락으로 스케일 및 회전, 모양, 크기, 색상을 편집하는 기능 구현했습니다.
+#### 1. SVG의 을 사용하는 방법
 
-```ts
-import { BoardTransform } from "@/entities/board/model";
-import { darkenColor } from "@/shared/utils/darkenColor";
-import { getRandomValue } from "@/shared/utils/getRandomValue";
-import { RefObject } from "react";
-import { Color, ColorType, Position, Size, Vertex, VertexType } from "./index";
+장점
+	•	SVG는 벡터 기반으로, 크기를 늘리거나 줄여도 품질 저하 없이 렌더링되므로 확대/축소(Zoom)에도 선명한 출력을 제공합니다.
+	•	<pattern> 태그를 사용하면 그리드 패턴을 보다 손쉽게 생성할 수 있습니다.
+	•	DOM에 추가된 SVG 요소를 직접 조작하거나 스타일을 변경하기도 용이합니다. SVG는 자체적으로 내부 DOM을 생성하기 때문입니다.
+	•	CSS와의 연동이 가능하여, fill 속성을 활용해 패턴 스타일링을 간편하게 할 수 있습니다.
+	•	SVG는 브라우저의 GPU 가속을 활용하므로, 확대/축소 시 비교적 부드럽게 동작합니다.
 
-export class Shape {
-  position: Position;
-  size: Size;
-  vertex: Vertex;
-  color: Color;
-  content: string;
-  isEditing: boolean = false;
-  scale: number = 1;
-  rotation: number = 0;
+단점
+	•	DOM 요소가 많아질수록 성능 저하가 발생할 수 있습니다. 특히 복잡한 애니메이션이나 빠른 동작 처리 시 성능이 떨어질 가능성이 있습니다.
+	•	정교한 그리드 패턴 제어가 어렵습니다.
+	•	Canvas처럼 픽셀 단위로 세밀하게 점의 크기, 간격 등을 동적으로 변경하기에는 제약이 따릅니다.
 
-  constructor({
-    position,
-    size = { w: 120, h: 120 },
-    color = getRandomValue(ColorType)().value,
-    vertex = getRandomValue(VertexType)().value,
-    content = "Touch Idea!",
-    scale = 1,
-    rotation = 0,
-  }: {
-    position: Position;
-    size?: Size;
-    color?: Color;
-    vertex?: Vertex;
-    content?: string;
-    scale?: number;
-    rotation?: number;
-  }) {
-    this.position = position;
-    this.size = size;
-    this.color = color;
-    this.vertex = vertex;
-    this.content = content;
-    this.scale = scale;
-    this.rotation = rotation;
-  }
+#### 2. Canvas 태그 내에서 동적으로 생성하는 방법
 
-  draw({
-    canvasRef,
-    transform,
-    isSelected,
-  }: {
-    canvasRef: RefObject<HTMLCanvasElement>;
-    transform: BoardTransform;
-    isSelected: boolean;
-  }) {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+장점
+	•	Canvas는 벡터가 아닌 픽셀 단위로 렌더링되므로, 대규모 그래픽 처리에 적합하며 고성능을 발휘합니다.
+	•	DOM 요소를 추가하지 않으므로, 대량의 점이나 복잡한 그래픽을 렌더링할 때 DOM 복잡도가 줄어들어 효율적입니다.
+	•	동적 렌더링에 강점이 있습니다.
+	•	JavaScript를 사용해 점의 크기, 간격, 위치 등을 실시간으로 제어할 수 있습니다.
+	•	줌이나 팬과 같은 동작도 유연하게 처리할 수 있습니다.
+	•	애니메이션 구현에 유리합니다.
+	•	Canvas는 프레임 단위로 재렌더링을 처리하므로 자연스러운 애니메이션을 지원합니다.
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+단점
+	•	화질 저하 가능성
+	•	확대/축소 시 저해상도 느낌이 들 수 있습니다. 이 문제는 고해상도 Canvas 설정으로 어느 정도 완화할 수 있습니다.
+	•	브라우저 크기가 변경되면 Canvas 크기를 다시 설정해야 하는 번거로움이 있습니다.
+	•	이벤트 처리의 어려움
+	•	Canvas는 픽셀 기반이기 때문에 DOM 이벤트와 직접적으로 연동하기 어렵습니다.
+	•	특정 점이나 영역의 클릭 이벤트를 처리하려면 별도의 로직을 구현해야 합니다.
 
-    ctx.save();
-
-    this.applyTransform(ctx, transform);
-    this.drawShape(ctx, transform);
-    this.drawText(ctx);
-    this.setEditing(ctx, isSelected);
-    ctx.restore();
-  }
-
-  private applyTransform(
-    ctx: CanvasRenderingContext2D,
-    transform: BoardTransform
-  ) {
-    const fixedX = this.position.x / transform.zoomScale;
-    const fixedY = this.position.y / transform.zoomScale;
-
-    ctx.translate(fixedX, fixedY);
-    ctx.rotate(this.rotation);
-    ctx.scale(this.scale, this.scale);
-  }
-
-  private drawShape(ctx: CanvasRenderingContext2D, transform: BoardTransform) {
-    ctx.fillStyle = this.color.fill;
-
-    const width = this.size.w * transform.zoomScale;
-    const height = this.size.h * transform.zoomScale;
-
-    if (this.vertex === VertexType.circle) {
-      ctx.beginPath();
-      ctx.arc(0, 0, width * 0.8, 0, 2 * Math.PI);
-    } else if (this.vertex === VertexType.square) {
-      const halfSideW = width / Math.sqrt(2);
-      const halfSideH = height / Math.sqrt(2);
-      ctx.beginPath();
-      ctx.rect(-halfSideW, -halfSideH, 2 * halfSideW, 2 * halfSideH);
-    } else if (this.vertex === VertexType.star) {
-      this.drawStar(ctx, width);
-    } else {
-      const sides = Math.min(this.vertex, 6);
-      const angle = (2 * Math.PI) / sides;
-
-      ctx.beginPath();
-      for (let i = 0; i < sides; i++) {
-        const x = width * 0.9 * Math.cos(angle * i);
-        const y = height * 0.9 * Math.sin(angle * i);
-        if (i === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
-      }
-      ctx.closePath();
-    }
-
-    ctx.fill();
-  }
-
-  private drawStar(ctx: CanvasRenderingContext2D, radius: number) {
-    const outerRadius = radius;
-    const innerRadius = radius / 2;
-    const points = 5;
-    const step = Math.PI / points;
-
-    ctx.beginPath();
-
-    for (let i = 0; i < 2 * points; i++) {
-      const r = i % 2 === 0 ? outerRadius : innerRadius;
-      const x = r * Math.sin(i * step);
-      const y = -r * Math.cos(i * step);
-      if (i === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    ctx.closePath();
-  }
-
-  private drawText(ctx: CanvasRenderingContext2D) {
-    const maxWidth = this.size.w;
-    const maxHeight = this.size.h;
-
-    ctx.fillStyle = darkenColor(this.color.fill);
-    ctx.font = "14px Pretendard";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    const lineHeight = 20;
-
-    const getLines = (text: string, maxWidth: number): string[] => {
-      const words = text.split(" ");
-      const lines: string[] = [];
-      let currentLine = words[0];
-
-      for (let i = 1; i < words.length; i++) {
-        const word = words[i];
-        const testLine = currentLine + " " + word;
-        const testWidth = ctx.measureText(testLine).width;
-
-        if (testWidth > maxWidth) {
-          lines.push(currentLine);
-          currentLine = word;
-        } else {
-          currentLine = testLine;
-        }
-      }
-      lines.push(currentLine);
-      return lines;
-    };
-
-    let lines = this.content
-      .split("\n")
-      .flatMap((line) => getLines(line, maxWidth));
-
-    const maxLines = Math.floor(maxHeight / lineHeight);
-
-    if (lines.length > maxLines) {
-      lines = lines.slice(0, maxLines);
-      const lastLine = lines[lines.length - 1];
-      let truncatedLine = lastLine;
-
-      while (
-        ctx.measureText(truncatedLine + "...").width > maxWidth &&
-        truncatedLine.length > 0
-      ) {
-        truncatedLine = truncatedLine.slice(0, -1);
-      }
-
-      lines[lines.length - 1] = truncatedLine + "...";
-    }
-
-    const startY = -((lines.length - 1) * lineHeight) / 2;
-
-    lines.forEach((line, index) => {
-      ctx.fillText(line, 0, startY + index * lineHeight);
-    });
-  }
-
-  private setEditing(ctx: CanvasRenderingContext2D, isEditing: boolean) {
-    this.isEditing = isEditing;
-    if (this.isEditing) {
-      ctx.strokeStyle = darkenColor(this.color.fill);
-      ctx.lineWidth = 3;
-      ctx.stroke();
-    }
-  }
-
-  setContent(ctx: CanvasRenderingContext2D, newContent: string) {
-    this.content = newContent;
-    this.drawText(ctx);
-  }
-
-  setPosition(newX: number, newY: number) {
-    this.position.x = newX;
-    this.position.y = newY;
-  }
-
-  setScale(newScale: number) {
-    this.scale = newScale;
-  }
-
-  setRotate(angleInDegrees: number) {
-    this.rotation = (angleInDegrees * Math.PI) / 180;
-  }
-
-  setVertex(newVertex: Vertex) {
-    this.vertex = newVertex;
-  }
-
-  setSize(newW: number, newH: number) {
-    this.size.w = newW;
-    this.size.h = newH;
-  }
-
-  setColor(newColor: Color) {
-    this.color = newColor;
-  }
-}
-```
+확대/축소 시 품질 유지, 구현의 간결성, CSS와의 연동, GPU 가속 지원, 그리고 DOM 조작의 유연성 때문에  SVG의 <pattern>을 채택했습니다.
 
 ### [2. 멀티터치 hook 구현](#목차)
 
 Web API 의 touch 인터페이스에서 제공해주는 속성을 통해 도형 노드 편집 기준을 작성했습니다.
-
 
 <br>
