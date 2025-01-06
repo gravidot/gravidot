@@ -39,7 +39,7 @@
 <br>
 
 ## [기술 스택](#목차)
-![next.js](https://img.shields.io/badge/next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![next.js](https://img.shields.io/badge/next-141414?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-blue.svg?style=for-the-badge&logo=TypeScript&logoColor=white)
 ![zustand](https://img.shields.io/badge/zustand-orange?style=for-the-badge&logo=zustand&logoColor=white)
 ![tailwindcss](https://img.shields.io/badge/tailwindcss-61DAFB?style=for-the-badge&logo=tailwindcss&logoColor=white)
