@@ -70,91 +70,52 @@
 ![vercel](https://img.shields.io/badge/vercel-f0f0f0?style=for-the-badge&logo=vercel&logoColor=black)
 
 
-## 기술 스택 선정 및 이유
+### 기술 스택 선정 및 이유
+- 플랫폼 — Web
+데스크톱/태블릿/모바일 모든 플랫폼에서도 브라우저 앱으로 접근할 수 있고 태블릿 사용자 편의성을 지원한다면 오프라인에서도 사용가능한 PWA 도 지원할 수도 있기 때문에 선정하게 되었습니다.
 
-- 플랫폼: `Web`
-    - 데스크톱/태블릿/모바일 모든 플랫폼에서도 브라우저 앱으로 접근할 수 있기 때문에 선정했습니다.
-    - **태블릿** 사용자 편의성을 지원한다면 오프라인에서도 사용가능한 `PWA` 도 지원할 수도 있기 때문에 선정했습니다.
+- 언어 — typescript
+자바스크립트의 정적 타입을 지원하기 때문에, 이후 타입스크립트로 type 과 interface 설계를 더욱 용이하게 하고 더 쉽게 타입 오류를 잡을 수도 있기 때문에 선정했습니다. 휴먼에러나 타입에러를 런타임 시점까지 보내지 않고, 오류를 발견하는 사이클을 줄일 수 있습니다.
 
-- 언어: `typescript`
-    - 자바스크립트의 정적 타입을 지원하기 때문에, 이후 타입스크립트로 `type` 과 `interface` **설계를 더욱 용이**하게 하고 더 쉽게 **타입 오류를 잡을 수도** 있기 때문에 선정했습니다. 휴먼에러나 타입에러를 런타임 시점까지 보내지 않고, 오류를 발견하는 사이클을 줄일 수 있습니다.
+- 프레임워크 — Next v15
+아무래도 React 와 비슷한 생태계이기 때문에 Next 를 사용할 때 러닝커브가 낮다고 판단했습니다.
 
-- 프레임워크: `Next v15`
-    - `React` 와 비슷한 생태계이기 때문에 Next 를 사용할 때 **러닝커브가 낮다고 판단**했습니다.
-    - 바닐라 자바스크립트로 하기에는 명령형 UI이기 때문에 유지보수를 위해 **선언형 UI를 지원**하기 위해 선정했습니다.
-    - **실시간 협업 페이지의 첫 로딩 속도가 중요**하다고 판단했기 때문에, SSR을 지원하는 Next 를 도입해보려고 합니다. ([**TTFB (Time to First Byte)를 약간 증가**시킬 수 있지만, 전체적인 FCP(First Contentful Paint)와 LCP(Largest Contentful Paint)가 개선됨](https://nextjs.org/conf/session/optimizing-lcp-partial-prerendering-deep-dive?utm_source))
-    - 추가적으로 **브레인스토밍 템플릿을 지원**한다면 이런 정적 데이터는 **SSR를 통해 미리 렌더링**하여 클라이언트에 빠르게 제공할 수 있기 때문에 Next 를 도입하기로 결정했습니다.
-    - Next 의 `Image` 컴포넌트를 사용해 **이미지 자동 최적화를** 지원받기 위해서 선정했습니다. 
-    https://reactnext-central.xyz/blog/nextjs/image-component
+추후 더 업데이트 될 실시간 협업 페이지의 첫 로딩 속도가 중요하다고 판단했기 때문에, SSR을 지원하는 Next 를 도입해보려고 합니다. (TTFB (Time to First Byte)를 약간 증가시킬 수 있지만, 전체적인 FCP(First Contentful Paint)와 LCP(Largest Contentful Paint)가 개선될 수 있습니다) 추가적으로 브레인스토밍 템플릿을 지원한다면 이런 정적 데이터는 SSR를 통해 미리 렌더링하여 클라이언트에 빠르게 제공할 수 있기 때문에 Next 를 도입하기로 결정했습니다. 만약 이미지 파일을 import 하는 기능이 있을 때, Next 의 Image 컴포넌트를 사용해 이미지 자동 최적화를 지원받기 위해서 선정했습니다.
 
 - 그 외 라이브러리
-    - `react-use-gesture` : 멀티제스쳐 인터페이스를 지원해줍니다.
-        
-        https://github.com/pmndrs/use-gesture : 데스크탑 / 패드 / 모바일 웹에서 일어날 수 있는 모든 제스쳐 이벤트들을 [테스트 코드](https://github.com/pmndrs/use-gesture/blob/main/test/pinch.test.tsx)를 거친 라이브러리를 도입하면 안정적으로 제스쳐를 핸들링할 수 있습니다. 또, 일반 브라우저 이벤트에는 없는 속도, 거리, 델타 등의 추가적인 kinematics(운동학적) 속성을 통해 업그레이드 된 제스처를 다룰 수 있습니다.
-        
-        **[초반결정 - 실시간협업 관련기능]**
-        
-    - [`socket.io`](http://socket.io) : 웹소켓과 소켓IO 는 조금 다른 특징이 있습니다. 웹 소켓의 경우, 대용량 데이터를 실시간으로 확인할 수 있는 예를 들어, 주식사이트 등이 유용하다고 생각합니다. 하지만 **gravidot** 서비스의 경우엔 socket.io 의 Room 이라는 개념이 좀 더 적합해보입니다. 하지만, 많은 이벤트의 양을 계속 보내야하는 부분을 신경 써야 할 것 같긴 합니다. [**Long Polling, Streaming**](https://doozi0316.tistory.com/entry/WebSocket%EC%9D%B4%EB%9E%80-%EA%B0%9C%EB%85%90%EA%B3%BC-%EB%8F%99%EC%9E%91-%EA%B3%BC%EC%A0%95-socketio-Polling-Streaming)
-        
-        또, [socket.io](http://socket.io) 의 경우, 특정 Port 를 통해 연결을 유지하며 양방향통신을 합니다. socket.io 는 js 를 이용하여 **브라우저 종류에 상관없이** 실시간 웹을 구현할 수 있습니다.
-        
-        - [`WebSocket`](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) : 실시간 협업을 지원하기 위해 클라이언트와 서버가 양방향 통신하도록 하는 프로토콜입니다. https://www.peterkimzz.com/websocket-vs-socket-io#websocket-vs-socketio
-        
-        https://socket.io/how-to/use-with-nextjs → `Next` 와도 [socket.io](http://socket.io) 는 호환가능합니다.
-        
-        ---
-        
-        **[좀 더 생각한 후, 더 나은 합리적인 결정 - 실시간협업 관련기능]**
-        
-        https://supabase.com/docs/guides/realtime 을 사용하면, 내부적으로 [socket.io](http://socket.io) 서버를 superbase 에서 따로 지원을 해주므로, `Vercel` 로 배포가 가능합니다.
-        
+react-use-gesture : 멀티제스쳐 인터페이스를 지원해줍니다. 데스크탑 / 패드 / 모바일 웹에서 일어날 수 있는 모든 제스쳐 이벤트들을 테스트 코드를 거친 라이브러리를 도입하면 안정적으로 제스쳐를 핸들링할 수 있습니다. 또, 일반 브라우저 이벤트에는 없는 속도, 거리, 델타 등의 추가적인 kinematics(운동학적) 속성을 통해 업그레이드 된 제스처를 다룰 수 있습니다.
 
-- 번들링: [`Turbopack`](https://turbo.build/pack/docs) (Next.js 12 이후 실험적 도입)
-    - Rust로 작성되어 훨씬 빠른 성능을 제공해줍니다.
-    - dev 모드에서 더욱 빠른 핫 리로딩(Hot Reloading) 속도를 지원합니다.
-    - Webpack과 비교해 더 낮은 리소스로 번들링할 수 있습니다.
+- Baas(서비스형 백엔드(Backend as a Service)) — Superbase
+https://supabase.com/docs/guides/realtime 을 사용하면, 내부적으로 socket.io 서버를 superbase 에서 따로 지원을 해주므로, Vercel 로 배포가 가능합니다.
 
-- 테스트 도구: [`Jest`](https://jestjs.io/docs/getting-started) / [`Playwright`](https://playwright.dev/)
-    - 타입스크립트 단위 테스트를 진행하기 위해 선정했습니다. https://jestjs.io/
-    - `cypress` ****보다는 **여러 장치와 브라우저**에서 자동화된 UI 테스트를 진행해보고자 선정했습니다.
-    https://playwright.dev/
+- 번들링 — Turbopack (Next.js 12 이후 실험적 도입)
+Rust로 작성되어 훨씬 빠른 성능을 제공해줍니다. dev 모드에서 더욱 빠른 핫 리로딩(Hot Reloading) 속도를 지원합니다.
 
-- 환경 버전 관리: `nvm use 20.18.0` = `node@20.18.0`
-    - next 나 여러 다른 라이브러리가 node version 18+ 이상일 때, 지원해주기 때문입니다.
+- 테스트 도구: Jest / Playwright
+타입스크립트 단위 테스트를 진행하기 위해 Jest 를 선정했습니다. E2E 테스트가 필요하다고 생각했고, 원래 익숙했던 cypress 보다는 여러 장치와 브라우저에서 자동화된 UI 테스트를 진행해보고자 Playwright 를 선정했습니다.
 
-- 상태관리: `Zustand`
-    - 단순하고 가벼운 (Redux 처럼 보일러플레이트가 많지 않음) API로 복잡한 상태를 효율적으로 관리할 수 있기 때문에 선정했습니다.
-    - WebSocket 과 결합하기 쉽습니다. 상태와 비동기 데이터 처리를 직관적으로 연동할 수 있습니다.
-    - Next 와 쉽게 통합 가능합니다.
+- 환경 버전 관리 — nvm use 20.18.0 = node@20.18.0
+Next 나 여러 다른 라이브러리가 node version 18+ 이상일 때, 지원해주기 때문입니다.
 
-- 스타일링: `Tailwind CSS`
-    - 코드 수가 줄고 핵심 비지니스 로직에 스타일 코드가 침범하지 않는다는 장점을 활용할 수 있습니다.
-    - 다크모드나 반응형 디자인을 쉽게 구현할 수 있습니다.
-    - PostCSS와 같은 플러그인 기반의 툴과 잘 통합됩니다.
-        - autoprefixer가 css코드에 vender prefixes를 자동으로 추가해주어 브라우저 호환성 관리 용이합니다.
+- 상태관리 — Zustand
+단순하고 가벼운 (Redux 처럼 보일러플레이트가 많지 않음) API로 복잡한 상태를 효율적으로 관리할 수 있기 때문에 선정했습니다. 상태와 비동기 데이터 처리를 직관적으로 연동할 수 있습니다. Next 와 쉽게 통합 가능합니다.
 
-- 배포: `Vercel`
-    
-    [초반결정 - 배포]
-    
-    - `Vercel` 은 https://socket.io/how-to/use-with-nextjs 에서 적힌 이유로, websocket 을 지원하지 않기 때문에 `AWS` 배포가 필수 일 것 같습니다.
-    - 하지만 Netlify 나 Vercel 의 경우, 정적 사이트 배포이므로, 대용량 트래픽을 지원해주지 않기 때문에 **로드 밸런싱**을 지원해주는 `AWS` 로 배포하고자 합니다.
-    
-    ---
-    
-    **[좀 더 생각한 한 후, 결정한 합리적인 사항 - 배포]**
-    
-    - [socket.io](http://socket.io) 를 활용하면, `Vercel` 을 사용할 수 없습니다. 이유는 로드밸런싱을 지원하지 않기 때문입니다. 하지만 superbase 의 realtime API 를 활용하면, Vercel 로 배포를 할 수 있기 때문에 이를 활용하기로 합리적인 결정을 하게 되었습니다.
+- 스타일링 — Tailwind CSS
+코드 수가 줄고 핵심 비지니스 로직에 스타일 코드가 침범하지 않는다는 장점을 활용할 수 있습니다. 다크모드나 반응형 디자인을 쉽게 구현할 수 있습니다. (이게 진짜 좋습니다..) PostCSS 와 같은 플러그인 기반의 툴과 잘 통합됩니다. autoprefixer가 css코드에 vender prefixes를 자동으로 추가해주어 브라우저 호환성 관리 용이합니다.
 
-- 형상관리도구: `git`
-    - 파일과 폴더로 협업하기 위해 버전관리 시스템 선택했습니다.
+- 배포 — Vercel
 
-- CI/CD: `Github Action`
-    - 이미 github 을 사용하고 있어 github 과 `Github Action`의 통합으로 관리가 편하고, 무엇보다 간단하게 파이프라인을 작성할 수 있습니다.
-    - 직접 commit 할 때마다 prettier, lint, test 를 수동으로 하지 않아도 되기 때문입니다.
-    - 코드 변경 시 자동으로 테스트를 실행하여 기능이 깨지지 않도록 미리 테스트 해보려고 합니다.
-    - 그리고 가능하다면, 여러 장치와 브라우저에서 자동화된 UI 테스트 실행해보면 좋을 것 같습니다.
-    - `on` 스크립트에서 main 에 push/merge 되었을 때, 이벤트 시점을 정하여 자동배포할 수 있기 때문입니다.
+Vercel 은 https://socket.io/how-to/use-with-nextjs 에서 적힌 이유로, WebSocket 을 지원하지 않기 때문에 AWS 로 배포하려 했으나, supabase realtime 을 활용하기로 결정하여 Vercel 배포가 가능하게 되었습니다.
+
+서버리스 플랫폼(Vercel, Netlify 등)은 서버리스 환경은 특정 요청만 처리하고 바로 종료되며, WebSocket 처럼 지속적인 연결을 유지하는 데 적합하지 않기 때문에, WebSocket 을 지원하지 않는 경우가 많습니다.
+
+- 형상관리도구 — git
+파일과 폴더로 협업하기 위해 버전관리 시스템 선택했습니다.
+
+- CI/CD — Github Action
+이미 github 을 사용하고 있어 github 과 Github Action의 통합으로 관리가 편하고, 무엇보다 간단하게 파이프라인을 작성할 수 있습니다. 직접 commit 할 때마다 prettier, lint, test 를 수동으로 하지 않아도 되기 때문입니다. 코드 변경 시 자동으로 테스트를 실행하여 기능이 깨지지 않도록 미리 테스트 해보려고 합니다. 그리고 가능하다면, 여러 장치와 브라우저에서 자동화된 UI 테스트 실행해보면 좋을 것 같습니다. on 스크립트에서 main 이나 dev 에 push/merge 되었을 때, 이벤트 시점을 정하여 자동배포할 수 있기 때문입니다.
+
+
 <br>
 
 ## [고민했던 부분](#목차)
