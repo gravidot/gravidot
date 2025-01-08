@@ -1,5 +1,7 @@
 import { ColorType, Vertex } from "@/entities/node/model";
 import { Shape } from "@/entities/node/model/shape";
+import { calculateAngle } from "@/shared/utils/calculateAngle";
+import { calculateDistance } from "@/shared/utils/calculateDistance";
 import { useCallback, useRef, useState } from "react";
 
 export function useMultiTouch(
@@ -30,14 +32,8 @@ export function useMultiTouch(
           { x: touch2.clientX, y: touch2.clientY },
         ]);
 
-        const currentDistance = Math.hypot(
-          touch2.clientX - touch1.clientX,
-          touch2.clientY - touch1.clientY
-        );
-        const currentAngle = Math.atan2(
-          touch2.clientY - touch1.clientY,
-          touch2.clientX - touch1.clientX
-        );
+        const currentDistance = calculateDistance(touch1, touch2);
+        const currentAngle = calculateAngle(touch1, touch2);
 
         if (initialDistance.current === null || initialAngle.current === null) {
           initialDistance.current = currentDistance;
@@ -126,22 +122,19 @@ export function useMultiTouch(
           { x: touch5.clientX, y: touch5.clientY },
         ]);
 
-        const distance = Math.hypot(
-          touch5.clientX - touch1.clientX,
-          touch5.clientY - touch1.clientY
-        );
+        const d = calculateDistance(touch1, touch5);
 
         let selectedColor;
 
-        if (distance < 300) {
+        if (d < 300) {
           selectedColor = ColorType.blue;
-        } else if (distance < 340) {
+        } else if (d < 340) {
           selectedColor = ColorType.green;
-        } else if (distance < 380) {
+        } else if (d < 380) {
           selectedColor = ColorType.pink;
-        } else if (distance < 420) {
+        } else if (d < 420) {
           selectedColor = ColorType.purple;
-        } else if (distance < 460) {
+        } else if (d < 460) {
           selectedColor = ColorType.yellow;
         } else {
           selectedColor = ColorType.transparent;
