@@ -1,4 +1,3 @@
-import { BoardTransform } from "@/entities/board/model";
 import { ColorType, Position, Size, Vertex } from "@/entities/node/model";
 import { Shape } from "@/entities/node/model/shape";
 import { darkenColor } from "@/shared/utils/darkenColor";
@@ -44,6 +43,10 @@ const mockContext = {
   shadowBlur: 0,
 };
 
+window.matchMedia = jest.fn().mockReturnValue({
+  matches: true,
+});
+
 const mockCanvasRef: RefObject<HTMLCanvasElement> = {
   current: {
     getContext: jest.fn().mockReturnValue(mockContext),
@@ -59,12 +62,6 @@ const mockCanvasRefWithNullCtx = {
     getContext: jest.fn().mockReturnValue(null),
   },
 } as unknown as RefObject<HTMLCanvasElement>;
-
-const mockTransform: BoardTransform = {
-  x: 0,
-  y: 0,
-  zoomScale: 1,
-};
 
 describe("Shape class", () => {
   beforeEach(() => {
@@ -89,7 +86,6 @@ describe("Shape class", () => {
 
     shape.draw({
       canvasRef: mockCanvasRef,
-      transform: mockTransform,
       isSelected: false,
     });
 
@@ -105,7 +101,6 @@ describe("Shape class", () => {
 
     shape.draw({
       canvasRef: mockCanvasRef,
-      transform: mockTransform,
       isSelected: false,
     });
 
@@ -121,7 +116,6 @@ describe("Shape class", () => {
 
     shape.draw({
       canvasRef: mockCanvasRef,
-      transform: mockTransform,
       isSelected: false,
     });
 
@@ -146,7 +140,6 @@ describe("Shape 클래스의 drawShape 메서드", () => {
 
     shape.draw({
       canvasRef: mockCanvasRef,
-      transform: mockTransform,
       isSelected: false,
     });
 
@@ -164,7 +157,6 @@ describe("Shape 클래스의 drawShape 메서드", () => {
 
     shape.draw({
       canvasRef: mockCanvasRef,
-      transform: mockTransform,
       isSelected: false,
     });
 
@@ -189,7 +181,6 @@ describe("Shape 클래스의 drawShape 메서드", () => {
 
     shape.draw({
       canvasRef: mockCanvasRef,
-      transform: mockTransform,
       isSelected: false,
     });
 
@@ -209,7 +200,6 @@ describe("Shape 클래스의 drawShape 메서드", () => {
 
     shape.draw({
       canvasRef: mockCanvasRef,
-      transform: mockTransform,
       isSelected: false,
     });
 
@@ -229,7 +219,6 @@ describe("Shape 클래스의 drawShape 메서드", () => {
 
     shape.draw({
       canvasRef: mockCanvasRef,
-      transform: mockTransform,
       isSelected: false,
     });
 
@@ -251,7 +240,6 @@ describe("shape.draw 메서드에서 canvas와 context를 확인한다.", () => 
 
     shape.draw({
       canvasRef: mockCanvasRefWithNull,
-      transform: mockTransform,
       isSelected: false,
     });
 
@@ -268,7 +256,6 @@ describe("shape.draw 메서드에서 canvas와 context를 확인한다.", () => 
 
     shape.draw({
       canvasRef: mockCanvasRefWithNullCtx,
-      transform: mockTransform,
       isSelected: false,
     });
 
@@ -287,7 +274,6 @@ describe("shape.draw 메서드에서 canvas와 context를 확인한다.", () => 
 
     shape.draw({
       canvasRef: mockCanvasRef,
-      transform: mockTransform,
       isSelected: false,
     });
 

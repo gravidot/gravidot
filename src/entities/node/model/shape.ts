@@ -1,4 +1,3 @@
-import { BoardTransform } from "@/entities/board/model";
 import { darkenColor } from "@/shared/utils/darkenColor";
 import { getRandomValue } from "@/shared/utils/getRandomValue";
 import { RefObject } from "react";
@@ -50,11 +49,9 @@ export class Shape {
 
   draw({
     canvasRef,
-    transform,
     isSelected,
   }: {
     canvasRef: RefObject<HTMLCanvasElement>;
-    transform: BoardTransform;
     isSelected: boolean;
   }) {
     const canvas = canvasRef.current;
@@ -65,8 +62,8 @@ export class Shape {
 
     ctx.save();
     this.applyShadow(ctx);
-    this.applyTransform(ctx, transform);
-    this.drawShape(ctx, transform);
+    this.applyTransform(ctx);
+    this.drawShape(ctx);
     this.drawText(ctx);
     this.setEditing(ctx, isSelected);
     ctx.restore();
@@ -79,23 +76,20 @@ export class Shape {
     ctx.shadowBlur = Shadow.blur;
   }
 
-  private applyTransform(
-    ctx: CanvasRenderingContext2D,
-    transform: BoardTransform
-  ) {
-    const fixedX = this.position.x / transform.zoomScale;
-    const fixedY = this.position.y / transform.zoomScale;
+  private applyTransform(ctx: CanvasRenderingContext2D) {
+    const fixedX = this.position.x;
+    const fixedY = this.position.y;
 
     ctx.translate(fixedX, fixedY);
     ctx.rotate(this.rotation);
     ctx.scale(this.scale, this.scale);
   }
 
-  private drawShape(ctx: CanvasRenderingContext2D, transform: BoardTransform) {
+  private drawShape(ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = this.color.fill;
 
-    const width = this.size.w * transform.zoomScale;
-    const height = this.size.h * transform.zoomScale;
+    const width = this.size.w;
+    const height = this.size.h;
 
     if (this.vertex === Vertex.circle) {
       ctx.beginPath();
