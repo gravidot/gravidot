@@ -37,7 +37,6 @@ export const useShapeGestures = ({
   const deletedShapesHistory = useRef<{ shape: Shape; index: number }[]>([]);
 
   const boardId = useBoardStore((state) => state.id);
-  const transform = useBoardStore((state) => state.transform);
   const nodes = useNodesStore((state) => state.nodes);
 
   const updateShape = (index: number, updates: Partial<Shape>) => {
@@ -219,12 +218,11 @@ export const useShapeGestures = ({
       shapes.forEach((shape, index) => {
         shape.draw({
           canvasRef: canvasRef,
-          transform: transform,
           isSelected: index === selectedShapeIndex,
         });
       });
     },
-    [shapes, selectedShapeIndex, canvasRef, transform, isActive]
+    [shapes, selectedShapeIndex, canvasRef, isActive]
   );
 
   useEffect(() => {

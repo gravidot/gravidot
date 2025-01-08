@@ -2,7 +2,6 @@
 
 import { useBoardStore } from "@/entities/board/store";
 import { fetchNodesByBoardId } from "@/entities/node/api";
-import { Canvas } from "@/features/canvas";
 import { Controls } from "@/features/controls";
 import { BackgroundVariant } from "@xyflow/react";
 import { useEffect, useRef, useState } from "react";
@@ -56,13 +55,6 @@ export function BoardPage() {
       />
       <div ref={ref} className={`h-dvh w-dvw touch-none`}>
         <TouchPoint touchPoints={touchPoints} />
-        <Canvas
-          canvasRef={canvasRef}
-          textareaRef={textareaRef}
-          shapes={shapes}
-          selectedShapeIndex={selectedShapeIndex}
-          updateShapeContent={updateShapeContent}
-        />
       </div>
     </>
   );
