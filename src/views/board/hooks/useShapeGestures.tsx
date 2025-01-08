@@ -90,7 +90,7 @@ export const useShapeGestures = ({
 
       setNodes((prev) => [...prev, node]);
     }
-  }, [isActive]);
+  }, [setNodes, isActive]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -161,21 +161,24 @@ export const useShapeGestures = ({
     [lastClickTime, nodes, setNodes]
   );
 
-  const handleDeleteNode = useCallback((nodeId: string | null) => {
-    if (!nodeId) return;
+  const handleDeleteNode = useCallback(
+    (nodeId: string | null) => {
+      if (!nodeId) return;
 
-    if (isMultiTouchActive.current) {
-      return;
-    }
+      if (isMultiTouchActive.current) {
+        return;
+      }
 
-    setNodes((prevNodes) => {
-      const nodeToDelete = prevNodes.find((node) => node.id === nodeId);
-      if (!nodeToDelete) return prevNodes;
+      setNodes((prevNodes) => {
+        const nodeToDelete = prevNodes.find((node) => node.id === nodeId);
+        if (!nodeToDelete) return prevNodes;
 
-      deletedNodesHistory.current.push(nodeToDelete);
-      return prevNodes.filter((node) => node.id !== nodeId);
-    });
-  }, []);
+        deletedNodesHistory.current.push(nodeToDelete);
+        return prevNodes.filter((node) => node.id !== nodeId);
+      });
+    },
+    [isMultiTouchActive, setNodes]
+  );
 
   const handleNodeDragStart = (event: React.MouseEvent | React.TouchEvent) => {
     if (isTouchDevice()) {
