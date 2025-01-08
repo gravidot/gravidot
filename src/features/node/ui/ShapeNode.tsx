@@ -4,7 +4,7 @@ import { Shape } from "@/entities/node/model";
 import { AutoResizeTextarea } from "@/shared/ui/AutoResizeTextarea";
 import { darkenColor } from "@/shared/utils/darkenColor";
 import { Handle } from "@xyflow/react";
-import { renderShape } from "./renderShape";
+import { SvgShape } from "./SvgShape";
 import { useMemo } from "react";
 
 export function ShapeNodeComponent({
@@ -25,7 +25,6 @@ export function ShapeNodeComponent({
     [rotation, scale]
   );
 
-  const renderedShape = renderShape(type, style);
   const darkenedColor = darkenColor(color.fill);
   const handlePositions = [
     Position.Top,
@@ -39,7 +38,7 @@ export function ShapeNodeComponent({
       className="relative"
       style={{ ...style, transform: transformStyle.transform }}
     >
-      {renderedShape}
+      <SvgShape type={type} style={style} />
       {handlePositions.map((position) => (
         <Handle
           key={position}

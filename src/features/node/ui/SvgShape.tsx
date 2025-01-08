@@ -23,14 +23,20 @@ const shapeComponentMap: Record<ShapeType, React.FC<SvgProps>> = {
   plus: SvgPlus,
 };
 
-export function renderShape(type: ShapeType, props: SvgProps): JSX.Element {
+export function SvgShape({
+  type,
+  style,
+}: {
+  type: ShapeType;
+  style: SvgProps;
+}) {
   const ShapeComponent = shapeComponentMap[type];
 
   if (!ShapeComponent) {
     return <>Not Supported Shape</>;
   }
 
-  return <ShapeComponent {...props} />;
+  return <ShapeComponent {...style} />;
 }
 
 function SvgEllipse({ width, height, color }: SvgProps) {
