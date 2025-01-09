@@ -128,7 +128,7 @@ export const useShapeGestures = ({
           position,
           data: {
             type: randomType,
-            content: `${randomType}`,
+            content: `Add text!`,
             size,
             color: getRandomValue(ColorType)().value,
             scale: 1,

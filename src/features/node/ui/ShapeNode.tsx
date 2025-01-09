@@ -1,5 +1,5 @@
 import { Shape } from "@/entities/node/model";
-import { AutoResizeTextarea } from "@/shared/ui/AutoResizeTextarea";
+import { AutoResizeInput } from "@/shared/ui/AutoResizeInput";
 import { DeleteButton } from "@/shared/ui/DeleteButton";
 import { darkenColor } from "@/shared/utils/darkenColor";
 import { Handle, Position } from "@xyflow/react";
@@ -18,9 +18,13 @@ export function ShapeNodeComponent({
   onDelete: (nodeId: string) => void;
 }) {
   const [isDeleteButtonVisible, setIsDeleteButtonVisible] = useState(false);
+  const [text, setText] = useState(content);
 
-  const toggleDeleteButton = () =>
+  const toggleDeleteButton = (event: React.MouseEvent | React.TouchEvent) => {
+    event.preventDefault();
+
     setIsDeleteButtonVisible((prevState) => !prevState);
+  };
 
   const handleDelete = () => isDeleteButtonVisible && onDelete(id);
 
@@ -55,11 +59,12 @@ export function ShapeNodeComponent({
           style={{ backgroundColor: darkenColor(color.fill) }}
         />
       ))}
-      <AutoResizeTextarea
-        content={content}
+      <AutoResizeInput
+        content={text}
         color={color.fill}
         width={size.w}
         height={size.h}
+        setContent={setText}
       />
       {isDeleteButtonVisible && (
         <DeleteButton
