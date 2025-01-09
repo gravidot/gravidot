@@ -8,11 +8,13 @@ import { SvgShape } from "./SvgShape";
 
 export function ShapeNodeComponent({
   id,
-  data: { content, size, type, color, scale, rotation },
+  data: { type, content, size, color, scale, rotation },
+  selected,
   onDelete,
 }: {
   id: string;
   data: Shape;
+  selected: boolean;
   onDelete: (nodeId: string) => void;
 }) {
   const [isDeleteButtonVisible, setIsDeleteButtonVisible] = useState(false);
@@ -40,7 +42,7 @@ export function ShapeNodeComponent({
       }}
       onDoubleClick={toggleDeleteButton}
     >
-      <SvgShape type={type} style={style} />
+      <SvgShape type={type} style={style} selected={selected} />
       {Object.values(Position).map((position) => (
         <Handle
           key={position}

@@ -9,7 +9,10 @@ interface SvgProps {
   color: string;
 }
 
-const shapeComponentMap: Record<ShapeType, React.FC<SvgProps>> = {
+const shapeComponentMap: Record<
+  ShapeType,
+  React.FC<SvgProps & { strokeWidth: number }>
+> = {
   circle: SvgEllipse,
   roundRectangle: SvgRoundRectangle,
   rectangle: SvgRectangle,
@@ -26,9 +29,11 @@ const shapeComponentMap: Record<ShapeType, React.FC<SvgProps>> = {
 export function SvgShape({
   type,
   style,
+  selected,
 }: {
   type: ShapeType;
   style: SvgProps;
+  selected: boolean;
 }) {
   const ShapeComponent = shapeComponentMap[type];
 
@@ -36,10 +41,17 @@ export function SvgShape({
     return <>Not Supported Shape</>;
   }
 
-  return <ShapeComponent {...style} />;
+  const strokeWidthWithSelected = selected ? strokeWidth * 4 : strokeWidth;
+
+  return <ShapeComponent {...style} strokeWidth={strokeWidthWithSelected} />;
 }
 
-function SvgEllipse({ width, height, color }: SvgProps) {
+function SvgEllipse({
+  width,
+  height,
+  color,
+  strokeWidth,
+}: SvgProps & { strokeWidth: number }) {
   const wRadius = width / 2;
   const hRadius = height / 2;
   const darkenedColor = darkenColor(color);
@@ -71,7 +83,12 @@ function SvgEllipse({ width, height, color }: SvgProps) {
   );
 }
 
-function SvgRoundRectangle({ width, height, color }: SvgProps) {
+function SvgRoundRectangle({
+  width,
+  height,
+  color,
+  strokeWidth,
+}: SvgProps & { strokeWidth: number }) {
   const innerOffset = strokeWidth / 2;
   const adjustedWidth = width - strokeWidth;
   const adjustedHeight = height - strokeWidth;
@@ -103,7 +120,12 @@ function SvgRoundRectangle({ width, height, color }: SvgProps) {
   );
 }
 
-function SvgRectangle({ width, height, color }: SvgProps) {
+function SvgRectangle({
+  width,
+  height,
+  color,
+  strokeWidth,
+}: SvgProps & { strokeWidth: number }) {
   return (
     <svg width={width} height={height}>
       <g>
@@ -148,7 +170,12 @@ function calculatePolygonPoints(
     .join(" ");
 }
 
-export function SvgPentagon({ width, height, color }: SvgProps) {
+export function SvgPentagon({
+  width,
+  height,
+  color,
+  strokeWidth,
+}: SvgProps & { strokeWidth: number }) {
   const calculatePentagonPoints = (width: number, height: number): string => {
     const centerX = width / 2;
     const centerY = height / 2;
@@ -180,7 +207,12 @@ export function SvgPentagon({ width, height, color }: SvgProps) {
   );
 }
 
-function SvgHexagon({ width, height, color }: SvgProps) {
+function SvgHexagon({
+  width,
+  height,
+  color,
+  strokeWidth,
+}: SvgProps & { strokeWidth: number }) {
   const calculateHexagonPath = (width: number, height: number): string => {
     const w = width / 2;
     const h = height / 2;
@@ -213,7 +245,12 @@ function SvgHexagon({ width, height, color }: SvgProps) {
   );
 }
 
-function SvgArrowRectangle({ width, height, color }: SvgProps) {
+function SvgArrowRectangle({
+  width,
+  height,
+  color,
+  strokeWidth,
+}: SvgProps & { strokeWidth: number }) {
   const calculateArrowPath = (width: number, height: number): string => {
     const arrowHeadWidth = width * 0.2;
     const arrowBodyWidth = width - arrowHeadWidth;
@@ -245,7 +282,12 @@ function SvgArrowRectangle({ width, height, color }: SvgProps) {
   );
 }
 
-function SvgCylinder({ width, height, color }: SvgProps) {
+function SvgCylinder({
+  width,
+  height,
+  color,
+  strokeWidth,
+}: SvgProps & { strokeWidth: number }) {
   const calculateCylinderPath = (width: number, height: number): string => {
     const rx = width / 2;
     const ry = height * 0.1;
@@ -300,7 +342,12 @@ function SvgCylinder({ width, height, color }: SvgProps) {
   );
 }
 
-function SvgTriangle({ width, height, color }: SvgProps) {
+function SvgTriangle({
+  width,
+  height,
+  color,
+  strokeWidth,
+}: SvgProps & { strokeWidth: number }) {
   const points = `
     ${strokeWidth},${height - strokeWidth} 
     ${width / 2},${strokeWidth} 
@@ -323,7 +370,12 @@ function SvgTriangle({ width, height, color }: SvgProps) {
   );
 }
 
-function SvgParallelogram({ width, height, color }: SvgProps) {
+function SvgParallelogram({
+  width,
+  height,
+  color,
+  strokeWidth,
+}: SvgProps & { strokeWidth: number }) {
   const offset = width * 0.25;
 
   const pathD = `
@@ -349,7 +401,12 @@ function SvgParallelogram({ width, height, color }: SvgProps) {
   );
 }
 
-function SvgStar({ width, height, color }: SvgProps) {
+function SvgStar({
+  width,
+  height,
+  color,
+  strokeWidth,
+}: SvgProps & { strokeWidth: number }) {
   const points = 5;
   const outerRadius = Math.min(width, height) / 2;
   const innerRadius = outerRadius * 0.5;
@@ -379,7 +436,12 @@ function SvgStar({ width, height, color }: SvgProps) {
   );
 }
 
-export function SvgPlus({ width, height, color }: SvgProps) {
+export function SvgPlus({
+  width,
+  height,
+  color,
+  strokeWidth,
+}: SvgProps & { strokeWidth: number }) {
   const calculatePlusPath = (width: number, height: number): string => {
     const horizontalBarHeight = height * 0.3;
     const verticalBarWidth = width * 0.3;

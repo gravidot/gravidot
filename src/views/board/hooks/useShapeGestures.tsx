@@ -122,7 +122,7 @@ export const useShapeGestures = ({
 
         const randomType = getRandomValue(ShapeTypeConst)().value;
 
-        const newNode = {
+        const newNode: GravidotNode = {
           id: `${nodes.length + 1}`,
           type: "shape",
           position,

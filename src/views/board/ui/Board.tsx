@@ -2,6 +2,7 @@
 
 import { useBoardStore } from "@/entities/board/store";
 import { fetchNodesByBoardId } from "@/entities/node/api";
+import { Shape } from "@/entities/node/model";
 import { Controls } from "@/features/controls";
 import { ShapeNodeComponent } from "@/features/node/ui/ShapeNode";
 import { useDarkMode } from "@/shared/hooks/useDarkMode";
@@ -87,9 +88,24 @@ export function BoardPage() {
 
   const nodeTypes = useMemo(
     () => ({
-      shape: ({ id, data }: { id: string; data: any }) => (
-        <ShapeNodeComponent id={id} data={data} onDelete={onDelete} />
-      ),
+      shape: ({
+        id,
+        data,
+        selected,
+      }: {
+        id: string;
+        data: Shape;
+        selected?: boolean;
+      }) => {
+        return (
+          <ShapeNodeComponent
+            id={id}
+            data={data}
+            selected={selected ?? false}
+            onDelete={onDelete}
+          />
+        );
+      },
     }),
     [onDelete]
   );
