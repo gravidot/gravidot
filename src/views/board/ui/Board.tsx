@@ -87,8 +87,8 @@ export function BoardPage() {
 
   const nodeTypes = useMemo(
     () => ({
-      shape: (props: any) => (
-        <ShapeNodeComponent {...props} onDelete={onDelete} />
+      shape: ({ id, data }: { id: string; data: any }) => (
+        <ShapeNodeComponent id={id} data={data} onDelete={onDelete} />
       ),
     }),
     [onDelete]
