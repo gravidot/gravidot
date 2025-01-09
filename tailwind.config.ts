@@ -7,6 +7,7 @@ export default {
     extend: {
       animation: {
         bounce: "bounce 1s infinite",
+        wiggle: "wiggle 0.5s ease-in-out infinite",
       },
       keyframes: {
         bounce: {
@@ -17,6 +18,16 @@ export default {
           "50%": {
             transform: "translateY(0)",
             animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
+          },
+        },
+        wiggle: {
+          "0%, 100%": {
+            transform: "rotate(-2deg)",
+            "-webkit-transform": "rotate(-2deg)",
+          },
+          "50%": {
+            transform: "rotate(2deg)",
+            "-webkit-transform": "rotate(2deg)",
           },
         },
       },

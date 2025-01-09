@@ -33,7 +33,7 @@ export function ShapeNodeComponent({
 
   return (
     <div
-      className="relative will-change-transform"
+      className={`${isDeleteButtonVisible && "animate-wiggle"} relative will-change-transform`}
       style={{
         ...style,
         transform: transformStyle.transform,
