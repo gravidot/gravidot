@@ -38,10 +38,10 @@ export function SvgShape({
   const ShapeComponent = shapeComponentMap[type];
 
   if (!ShapeComponent) {
-    return <>Not Supported Shape</>;
+    return null;
   }
 
-  const strokeWidthWithSelected = selected ? strokeWidth * 4 : strokeWidth;
+  const strokeWidthWithSelected = selected ? strokeWidth * 3 : strokeWidth;
 
   return <ShapeComponent {...style} strokeWidth={strokeWidthWithSelected} />;
 }
@@ -57,29 +57,27 @@ function SvgEllipse({
   const darkenedColor = darkenColor(color);
 
   return (
-    <>
-      <svg width={width} height={height}>
-        <g>
-          <ellipse
-            cx={wRadius}
-            cy={hRadius}
-            rx={Math.min(wRadius, hRadius)}
-            ry={Math.min(wRadius, hRadius)}
-            fill={color}
-            fillOpacity="0.8"
-          />
-          <ellipse
-            cx={wRadius}
-            cy={hRadius}
-            rx={Math.min(wRadius, hRadius) - strokeWidth / 2}
-            ry={Math.min(wRadius, hRadius) - strokeWidth / 2}
-            stroke={darkenedColor}
-            strokeWidth={strokeWidth}
-            fill="none"
-          />
-        </g>
-      </svg>
-    </>
+    <svg width={width} height={height}>
+      <g>
+        <ellipse
+          cx={wRadius}
+          cy={hRadius}
+          rx={Math.min(wRadius, hRadius)}
+          ry={Math.min(wRadius, hRadius)}
+          fill={color}
+          fillOpacity="0.8"
+        />
+        <ellipse
+          cx={wRadius}
+          cy={hRadius}
+          rx={Math.min(wRadius, hRadius) - strokeWidth / 2}
+          ry={Math.min(wRadius, hRadius) - strokeWidth / 2}
+          stroke={darkenedColor}
+          strokeWidth={strokeWidth}
+          fill="none"
+        />
+      </g>
+    </svg>
   );
 }
 
@@ -176,23 +174,7 @@ export function SvgPentagon({
   color,
   strokeWidth,
 }: SvgProps & { strokeWidth: number }) {
-  const calculatePentagonPoints = (width: number, height: number): string => {
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const aspectRatio = width / height;
-    const r = Math.min(width, height) / 2;
-    const angle = (2 * Math.PI) / 5;
-
-    return Array.from({ length: 5 })
-      .map((_, i) => {
-        const x = centerX + r * aspectRatio * Math.cos(i * angle - Math.PI / 2);
-        const y = centerY + r * Math.sin(i * angle - Math.PI / 2);
-        return `${x},${y}`;
-      })
-      .join(" ");
-  };
-
-  const points = calculatePentagonPoints(width, height);
+  const points = calculatePolygonPoints(5, width, height);
 
   return (
     <svg width={width} height={height}>
