@@ -18,7 +18,7 @@ import {
   useEdgesState,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useShapeGestures } from "../hooks/useShapeGestures";
 import { GestureMode } from "../types";
 import { TouchPoint } from "./TouchPoint";
@@ -50,12 +50,10 @@ export function BoardPage() {
     nodes,
     touchPoints,
     handlePaneDoubleClick,
-    handleNodeDragStart,
-    handleNodeDrag,
-    handleNodeDragEnd,
     handleStoreDeleteHistory,
-    handleNodesChange,
     onInit,
+    onNodesChange,
+    onDelete,
   } = useShapeGestures({
     isActive: mode === "shape",
     divBoardRef,
@@ -87,6 +85,15 @@ export function BoardPage() {
 
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+  const nodeTypes = useMemo(
+    () => ({
+      shape: (props: any) => (
+        <ShapeNodeComponent {...props} onDelete={onDelete} />
+      ),
+    }),
+    [onDelete]
+  );
+
   const onConnect = useCallback(
     (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
     [setEdges]
@@ -104,7 +111,7 @@ export function BoardPage() {
         />
         <ReactFlow
           ref={divBoardRef}
-          nodeTypes={{ shape: ShapeNodeComponent }}
+          nodeTypes={nodeTypes}
           className="touch-none"
           zoomOnDoubleClick={false}
           zoomOnPinch={mode === "board"}
@@ -114,15 +121,12 @@ export function BoardPage() {
           nodes={nodes}
           edges={edges}
           onlyRenderVisibleElements
-          onNodesChange={handleNodesChange}
+          onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           connectionMode={ConnectionMode.Loose}
           onPaneClick={handlePaneDoubleClick}
           onSelectionChange={onSelectionChange}
-          onNodeDragStart={handleNodeDragStart}
-          onNodeDrag={handleNodeDrag}
-          onNodeDragStop={handleNodeDragEnd}
           onInit={onInit}
           minZoom={0.2}
           maxZoom={3}

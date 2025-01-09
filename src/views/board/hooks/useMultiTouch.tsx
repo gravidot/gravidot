@@ -38,10 +38,7 @@ export function useMultiTouch(
     initialAngle.current = null;
     setTouchPoints([]);
     activeTouchType.current = null;
-    isMultiTouchActive.current = false;
   };
-
-  const handleNodesChange = onNodesChange;
 
   const handleTouchMove = useCallback(
     (event: TouchEvent) => {
@@ -78,7 +75,7 @@ export function useMultiTouch(
         const rotation =
           ((currentAngle - initialAngle.current) * 180) / Math.PI;
 
-        handleNodesChange([
+        onNodesChange([
           {
             id: selectedNodeId,
             type: "replace",
@@ -115,7 +112,7 @@ export function useMultiTouch(
         else if (angleDeg <= 30) selectedVertex = ShapeTypeConst.star;
         else selectedVertex = ShapeTypeConst.plus;
 
-        handleNodesChange([
+        onNodesChange([
           {
             id: selectedNodeId,
             type: "replace",
@@ -139,7 +136,7 @@ export function useMultiTouch(
           h: Math.max(100, maxY - minY),
         };
 
-        handleNodesChange([
+        onNodesChange([
           {
             id: selectedNodeId,
             type: "replace",
@@ -176,7 +173,7 @@ export function useMultiTouch(
           colorThresholds.find((threshold) => d < threshold.threshold)?.color ||
           ColorType.transparent;
 
-        handleNodesChange([
+        onNodesChange([
           {
             id: selectedNodeId,
             type: "replace",
@@ -191,7 +188,7 @@ export function useMultiTouch(
         ]);
       }
     },
-    [isActive, selectedNodeId, nodes, handleNodesChange]
+    [isActive, selectedNodeId, nodes, onNodesChange]
   );
 
   const handleTouchEnd = useCallback(() => {
@@ -203,7 +200,6 @@ export function useMultiTouch(
   return {
     handleTouchMove,
     handleTouchEnd,
-    handleNodesChange,
     touchPoints,
     isMultiTouchActive,
   };

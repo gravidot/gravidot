@@ -14,9 +14,7 @@ import {
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { useMultiTouch } from "./useMultiTouch";
 
-const DRAG_REPEAT_THRESHOLD = 8;
 const DOUBLE_CLICK_TIME_THRESHOLD = 250;
-const DRAG_RESET_TIMEOUT = 250;
 
 export const useShapeGestures = ({
   isActive,
@@ -30,13 +28,6 @@ export const useShapeGestures = ({
   const [nodes, setNodes, onNodesChange] = useNodesState<GravidotNode>([]);
   const [lastClickTime, setLastClickTime] = useState<number>(0);
 
-  const dragCount = useRef<number>(0);
-  const lastDragDirection = useRef<"left" | "right" | null>(null);
-  const dragResetTimer = useRef<NodeJS.Timeout | null>(null);
-  const isDragging = useRef(false);
-
-  const previousPosition = useRef<number | null>(null);
-
   const deletedNodesHistory = useRef<GravidotNode[]>([]);
   const createdNodesHistory = useRef<GravidotNode[]>([]);
 
@@ -45,18 +36,12 @@ export const useShapeGestures = ({
     GravidotEdge
   > | null>(null);
 
-  const isTouchDevice = useCallback(
-    () => "ontouchstart" in window || navigator.maxTouchPoints > 0,
-    []
+  const { handleTouchMove, handleTouchEnd, touchPoints } = useMultiTouch(
+    isActive,
+    selectedNodeId,
+    nodes,
+    onNodesChange
   );
-
-  const {
-    handleTouchMove,
-    handleTouchEnd,
-    handleNodesChange,
-    touchPoints,
-    isMultiTouchActive,
-  } = useMultiTouch(isActive, selectedNodeId, nodes, onNodesChange);
 
   useEffect(() => {
     if (!isActive) return;
@@ -161,13 +146,9 @@ export const useShapeGestures = ({
     [lastClickTime, nodes, setNodes]
   );
 
-  const handleDeleteNode = useCallback(
+  const onDelete = useCallback(
     (nodeId: string | null) => {
       if (!nodeId) return;
-
-      if (isMultiTouchActive.current) {
-        return;
-      }
 
       setNodes((prevNodes) => {
         const nodeToDelete = prevNodes.find((node) => node.id === nodeId);
@@ -177,80 +158,8 @@ export const useShapeGestures = ({
         return prevNodes.filter((node) => node.id !== nodeId);
       });
     },
-    [isMultiTouchActive, setNodes]
+    [setNodes]
   );
-
-  const handleNodeDragStart = (event: React.MouseEvent | React.TouchEvent) => {
-    if (isTouchDevice()) {
-      const startX =
-        "touches" in event ? event.touches[0].clientX : event.clientX;
-      previousPosition.current = startX;
-      isDragging.current = true;
-    }
-  };
-
-  const handleNodeDrag = (event: React.MouseEvent | React.TouchEvent) => {
-    if (!isActive || selectedNodeId === null || !isDragging.current) return;
-
-    if (isTouchDevice()) {
-      if ("touches" in event && event.touches.length > 1) {
-        dragCount.current = 0;
-        lastDragDirection.current = null;
-        return;
-      }
-
-      const currentX =
-        "touches" in event ? event.touches[0].clientX : event.clientX;
-
-      if (previousPosition.current === null) {
-        previousPosition.current = currentX;
-        return;
-      }
-
-      const currentDirection =
-        currentX > previousPosition.current ? "right" : "left";
-
-      if (
-        lastDragDirection.current &&
-        currentDirection !== lastDragDirection.current
-      ) {
-        dragCount.current++;
-
-        if (dragResetTimer.current) {
-          clearTimeout(dragResetTimer.current);
-        }
-
-        dragResetTimer.current = setTimeout(() => {
-          dragCount.current = 0;
-          lastDragDirection.current = null;
-        }, DRAG_RESET_TIMEOUT);
-      }
-
-      lastDragDirection.current = currentDirection;
-      previousPosition.current = currentX;
-
-      if (dragCount.current >= DRAG_REPEAT_THRESHOLD) {
-        handleDeleteNode(selectedNodeId);
-
-        dragCount.current = 0;
-        lastDragDirection.current = null;
-        previousPosition.current = null;
-        isDragging.current = false;
-
-        if (dragResetTimer.current) {
-          clearTimeout(dragResetTimer.current);
-          dragResetTimer.current = null;
-        }
-      }
-    }
-  };
-
-  const handleNodeDragEnd = () => {
-    if (isTouchDevice()) {
-      isDragging.current = false;
-      previousPosition.current = null;
-    }
-  };
 
   const handleStoreDeleteHistory = async ({
     nodes,
@@ -275,11 +184,9 @@ export const useShapeGestures = ({
     nodes,
     touchPoints,
     handlePaneDoubleClick,
-    handleNodeDragStart,
-    handleNodeDrag,
-    handleNodeDragEnd,
     handleStoreDeleteHistory,
-    handleNodesChange,
     onInit,
+    onNodesChange,
+    onDelete,
   };
 };

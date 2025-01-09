@@ -1,22 +1,28 @@
-import { Position } from "@xyflow/react";
-
 import { Shape } from "@/entities/node/model";
 import { AutoResizeTextarea } from "@/shared/ui/AutoResizeTextarea";
+import { DeleteButton } from "@/shared/ui/DeleteButton";
 import { darkenColor } from "@/shared/utils/darkenColor";
-import { Handle } from "@xyflow/react";
+import { Handle, Position } from "@xyflow/react";
+import { useMemo, useState } from "react";
 import { SvgShape } from "./SvgShape";
-import { useMemo } from "react";
 
 export function ShapeNodeComponent({
+  id,
   data: { content, size, type, color, scale, rotation },
+  onDelete,
 }: {
+  id: string;
   data: Shape;
+  onDelete: (nodeId: string) => void;
 }) {
-  const style = {
-    width: size.w,
-    height: size.h,
-    color: color.fill,
-  };
+  const [isDeleteButtonVisible, setIsDeleteButtonVisible] = useState(false);
+
+  const toggleDeleteButton = () =>
+    setIsDeleteButtonVisible((prevState) => !prevState);
+
+  const handleDelete = () => isDeleteButtonVisible && onDelete(id);
+
+  const style = { width: size.w, height: size.h, color: color.fill };
 
   const transformStyle = useMemo(
     () => ({
@@ -25,21 +31,17 @@ export function ShapeNodeComponent({
     [rotation, scale]
   );
 
-  const darkenedColor = darkenColor(color.fill);
-  const handlePositions = [
-    Position.Top,
-    Position.Right,
-    Position.Bottom,
-    Position.Left,
-  ];
-
   return (
     <div
-      className="relative"
-      style={{ ...style, transform: transformStyle.transform }}
+      className="relative will-change-transform"
+      style={{
+        ...style,
+        transform: transformStyle.transform,
+      }}
+      onDoubleClick={toggleDeleteButton}
     >
       <SvgShape type={type} style={style} />
-      {handlePositions.map((position) => (
+      {Object.values(Position).map((position) => (
         <Handle
           key={position}
           type={
@@ -48,7 +50,7 @@ export function ShapeNodeComponent({
               : "source"
           }
           position={position}
-          style={{ backgroundColor: darkenedColor }}
+          style={{ backgroundColor: darkenColor(color.fill) }}
         />
       ))}
       <AutoResizeTextarea
@@ -57,6 +59,12 @@ export function ShapeNodeComponent({
         width={size.w}
         height={size.h}
       />
+      {isDeleteButtonVisible && (
+        <DeleteButton
+          onClick={handleDelete}
+          className="color-red absolute -right-2 -top-2"
+        />
+      )}
     </div>
   );
 }
