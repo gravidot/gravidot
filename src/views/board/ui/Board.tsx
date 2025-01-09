@@ -116,7 +116,7 @@ export function BoardPage() {
   );
 
   return (
-    <div className="h-dvh w-dvw touch-none">
+    <div className="h-dvh w-dvw touch-none select-none">
       <ReactFlowProvider>
         <TouchPoint touchPoints={touchPoints} />
         <Controls
