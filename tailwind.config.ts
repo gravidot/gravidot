@@ -8,6 +8,7 @@ export default {
       animation: {
         bounce: "bounce 1s infinite",
         wiggle: "wiggle 0.5s ease-in-out infinite",
+        sparkle: "sparkle 1s linear infinite",
       },
       keyframes: {
         bounce: {
@@ -28,6 +29,23 @@ export default {
           "50%": {
             transform: "rotate(2deg)",
             "-webkit-transform": "rotate(2deg)",
+          },
+        },
+        sparkle: {
+          "0%": {
+            opacity: "0.5",
+            transform: "rotate(-1deg)",
+            filter: "brightness(0.8)",
+          },
+          "50%": {
+            opacity: "1",
+            transform: "rotate(1deg)",
+            filter: "brightness(1.2)",
+          },
+          "100%": {
+            opacity: "0.5",
+            transform: "rotate(-1deg)",
+            filter: "brightness(0.8)",
           },
         },
       },

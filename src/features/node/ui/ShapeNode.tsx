@@ -1,8 +1,9 @@
 import { Shape } from "@/entities/node/model";
+import { useDarkMode } from "@/shared/hooks/useDarkMode";
 import { AutoResizeInput } from "@/shared/ui/AutoResizeInput";
 import { DeleteButton } from "@/shared/ui/DeleteButton";
 import { darkenColor } from "@/shared/utils/darkenColor";
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useConnection } from "@xyflow/react";
 import { useMemo, useState } from "react";
 import { SvgShape } from "./SvgShape";
 
@@ -17,8 +18,13 @@ export function ShapeNodeComponent({
   selected: boolean;
   onDelete: (nodeId: string) => void;
 }) {
+  const connection = useConnection();
+  const isTarget = connection.inProgress && connection.fromNode.id !== id;
+
   const [isDeleteButtonVisible, setIsDeleteButtonVisible] = useState(false);
   const [text, setText] = useState(content);
+
+  const isDarkMode = useDarkMode();
 
   const toggleDeleteButton = (event: React.MouseEvent | React.TouchEvent) => {
     event.preventDefault();
@@ -28,7 +34,12 @@ export function ShapeNodeComponent({
 
   const handleDelete = () => isDeleteButtonVisible && onDelete(id);
 
-  const style = { width: size.w, height: size.h, color: color.fill };
+  const style = {
+    width: size.w,
+    height: size.h,
+    color: color.fill,
+    darkenColor: darkenColor(color.fill, isDarkMode),
+  };
 
   const transformStyle = useMemo(
     () => ({
@@ -39,7 +50,7 @@ export function ShapeNodeComponent({
 
   return (
     <div
-      className={`${isDeleteButtonVisible && "animate-wiggle"} relative will-change-transform`}
+      className={`${isDeleteButtonVisible && "animate-wiggle"} ${isTarget && "animate-sparkle"} relative will-change-transform`}
       style={{
         ...style,
         transform: transformStyle.transform,
@@ -47,18 +58,44 @@ export function ShapeNodeComponent({
       onDoubleClick={toggleDeleteButton}
     >
       <SvgShape type={type} style={style} selected={selected} />
-      {Object.values(Position).map((position) => (
+      {!connection.inProgress && (
         <Handle
-          key={position}
-          type={
-            position === Position.Top || position === Position.Bottom
-              ? "target"
-              : "source"
-          }
-          position={position}
-          style={{ backgroundColor: darkenColor(color.fill) }}
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            width: "50px",
+            height: "80%",
+            transform: "translate(-50%, -50%)",
+            borderRadius: 0,
+            border: "none",
+            backgroundColor: "black",
+            opacity: 0,
+          }}
+          position={Position.Right}
+          type="source"
         />
-      ))}
+      )}
+      {(!connection.inProgress || isTarget) && (
+        <Handle
+          style={{
+            overflow: "hidden",
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50px",
+            height: "80%",
+            borderRadius: 0,
+            border: "none",
+            backgroundColor: "black",
+            opacity: 0,
+          }}
+          position={Position.Left}
+          type="target"
+          isConnectableStart={false}
+        />
+      )}
       <AutoResizeInput
         content={text}
         color={color.fill}

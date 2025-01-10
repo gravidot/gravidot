@@ -1,5 +1,4 @@
 import { ShapeType } from "@/entities/node/model";
-import { darkenColor } from "@/shared/utils/darkenColor";
 
 const strokeWidth = 1;
 
@@ -7,6 +6,7 @@ interface SvgProps {
   width: number;
   height: number;
   color: string;
+  darkenColor: string;
 }
 
 const shapeComponentMap: Record<
@@ -50,11 +50,11 @@ function SvgEllipse({
   width,
   height,
   color,
+  darkenColor,
   strokeWidth,
 }: SvgProps & { strokeWidth: number }) {
   const wRadius = width / 2;
   const hRadius = height / 2;
-  const darkenedColor = darkenColor(color);
 
   return (
     <svg width={width} height={height}>
@@ -72,7 +72,7 @@ function SvgEllipse({
           cy={hRadius}
           rx={Math.min(wRadius, hRadius) - strokeWidth / 2}
           ry={Math.min(wRadius, hRadius) - strokeWidth / 2}
-          stroke={darkenedColor}
+          stroke={darkenColor}
           strokeWidth={strokeWidth}
           fill="none"
         />
@@ -86,6 +86,7 @@ function SvgRoundRectangle({
   height,
   color,
   strokeWidth,
+  darkenColor,
 }: SvgProps & { strokeWidth: number }) {
   const innerOffset = strokeWidth / 2;
   const adjustedWidth = width - strokeWidth;
@@ -110,7 +111,7 @@ function SvgRoundRectangle({
           width={adjustedWidth}
           height={adjustedHeight}
           fill="none"
-          stroke={darkenColor(color)}
+          stroke={darkenColor}
           strokeWidth={strokeWidth}
         />
       </g>
@@ -123,6 +124,7 @@ function SvgRectangle({
   height,
   color,
   strokeWidth,
+  darkenColor,
 }: SvgProps & { strokeWidth: number }) {
   return (
     <svg width={width} height={height}>
@@ -141,7 +143,7 @@ function SvgRectangle({
           width={width - strokeWidth}
           height={height - strokeWidth}
           fill="none"
-          stroke={darkenColor(color)}
+          stroke={darkenColor}
           strokeWidth={strokeWidth}
         />
       </g>
@@ -173,6 +175,7 @@ export function SvgPentagon({
   height,
   color,
   strokeWidth,
+  darkenColor,
 }: SvgProps & { strokeWidth: number }) {
   const points = calculatePolygonPoints(5, width, height);
 
@@ -182,7 +185,7 @@ export function SvgPentagon({
       <polygon
         points={points}
         fill="none"
-        stroke={darkenColor(color)}
+        stroke={darkenColor}
         strokeWidth={strokeWidth}
       />
     </svg>
@@ -194,6 +197,7 @@ function SvgHexagon({
   height,
   color,
   strokeWidth,
+  darkenColor,
 }: SvgProps & { strokeWidth: number }) {
   const calculateHexagonPath = (width: number, height: number): string => {
     const w = width / 2;
@@ -219,7 +223,7 @@ function SvgHexagon({
           d={path}
           fill={color}
           strokeWidth={strokeWidth}
-          stroke={darkenColor(color)}
+          stroke={darkenColor}
           fillOpacity="0.8"
         ></path>
       </g>
@@ -231,6 +235,7 @@ function SvgArrowRectangle({
   width,
   height,
   color,
+  darkenColor,
   strokeWidth,
 }: SvgProps & { strokeWidth: number }) {
   const calculateArrowPath = (width: number, height: number): string => {
@@ -256,7 +261,7 @@ function SvgArrowRectangle({
           d={path}
           fill={color}
           strokeWidth={strokeWidth}
-          stroke={darkenColor(color)}
+          stroke={darkenColor}
           fillOpacity="0.8"
         ></path>
       </g>
@@ -268,6 +273,7 @@ function SvgCylinder({
   width,
   height,
   color,
+  darkenColor,
   strokeWidth,
 }: SvgProps & { strokeWidth: number }) {
   const calculateCylinderPath = (width: number, height: number): string => {
@@ -309,14 +315,14 @@ function SvgCylinder({
         <path
           d={cylinderPath}
           fill="none"
-          stroke={darkenColor(color)}
+          stroke={darkenColor}
           strokeWidth={strokeWidth}
         />
         <path d={topEllipsePath} fill={color} fillOpacity="0.8" />
         <path
           d={topEllipsePath}
           fill="none"
-          stroke={darkenColor(color)}
+          stroke={darkenColor}
           strokeWidth={strokeWidth}
         />
       </g>
@@ -328,6 +334,7 @@ function SvgTriangle({
   width,
   height,
   color,
+  darkenColor,
   strokeWidth,
 }: SvgProps & { strokeWidth: number }) {
   const points = `
@@ -344,7 +351,7 @@ function SvgTriangle({
         <polygon
           points={points}
           fill="none"
-          stroke={darkenColor(color)}
+          stroke={darkenColor}
           strokeWidth={strokeWidth}
         />
       </g>
@@ -356,6 +363,7 @@ function SvgParallelogram({
   width,
   height,
   color,
+  darkenColor,
   strokeWidth,
 }: SvgProps & { strokeWidth: number }) {
   const offset = width * 0.25;
@@ -375,7 +383,7 @@ function SvgParallelogram({
           d={pathD}
           fill={color}
           strokeWidth={strokeWidth}
-          stroke={darkenColor(color)}
+          stroke={darkenColor}
           fillOpacity="0.8"
         ></path>
       </g>
@@ -387,6 +395,7 @@ function SvgStar({
   width,
   height,
   color,
+  darkenColor,
   strokeWidth,
 }: SvgProps & { strokeWidth: number }) {
   const points = 5;
@@ -410,7 +419,7 @@ function SvgStar({
       <polygon
         points={pathData}
         fill={color}
-        stroke={darkenColor(color)}
+        stroke={darkenColor}
         strokeWidth={strokeWidth}
         fillOpacity="0.8"
       />
@@ -422,6 +431,7 @@ export function SvgPlus({
   width,
   height,
   color,
+  darkenColor,
   strokeWidth,
 }: SvgProps & { strokeWidth: number }) {
   const calculatePlusPath = (width: number, height: number): string => {
@@ -456,7 +466,7 @@ export function SvgPlus({
         <path
           d={path}
           fill="none"
-          stroke={darkenColor(color)}
+          stroke={darkenColor}
           strokeWidth={strokeWidth}
         />
       </g>

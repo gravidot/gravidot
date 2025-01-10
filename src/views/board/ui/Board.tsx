@@ -2,8 +2,10 @@
 
 import { useBoardStore } from "@/entities/board/store";
 import { fetchNodesByBoardId } from "@/entities/node/api";
-import { Shape } from "@/entities/node/model";
+import { GravidotEdge, Shape } from "@/entities/node/model";
 import { Controls } from "@/features/controls";
+import { FloatingEdge } from "@/features/edge/ui";
+import { CustomConnectionLine } from "@/features/edge/ui/CustomConnectionLine";
 import { ShapeNodeComponent } from "@/features/node/ui/ShapeNode";
 import { useDarkMode } from "@/shared/hooks/useDarkMode";
 import {
@@ -12,6 +14,7 @@ import {
   BackgroundVariant,
   Connection,
   ConnectionMode,
+  MarkerType,
   MiniMap,
   OnSelectionChangeParams,
   ReactFlow,
@@ -27,7 +30,11 @@ import { TouchPoint } from "./TouchPoint";
 const LIGHT_MODE = "#dedede";
 const DARK_MODE = "#363636";
 
-const initialEdges = [{ id: "e1-2", source: "1", target: "2", animated: true }];
+const initialEdges = [
+  { id: "e1-2", source: "1", target: "2", animated: true, reconnectable: true },
+];
+
+const edgeTypes = { floating: FloatingEdge };
 
 export function BoardPage() {
   const [mode, setMode] = useState<GestureMode>("shape");
@@ -84,7 +91,8 @@ export function BoardPage() {
     );
   };
 
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [edges, setEdges, onEdgesChange] =
+    useEdgesState<GravidotEdge>(initialEdges);
 
   const nodeTypes = useMemo(
     () => ({
@@ -115,8 +123,21 @@ export function BoardPage() {
     [setEdges]
   );
 
+  const defaultEdgeOptions = {
+    type: "floating",
+    markerEnd: {
+      type: MarkerType.Arrow,
+      width: 20,
+      height: 20,
+      color: "#949494",
+    },
+    style: {
+      stroke: "#949494",
+    },
+  };
+
   return (
-    <div className="h-dvh w-dvw touch-none select-none">
+    <div className="h-dvh w-dvw touch-none">
       <ReactFlowProvider>
         <TouchPoint touchPoints={touchPoints} />
         <Controls
@@ -128,7 +149,10 @@ export function BoardPage() {
         <ReactFlow
           ref={divBoardRef}
           nodeTypes={nodeTypes}
-          className="touch-none"
+          edgeTypes={edgeTypes}
+          defaultEdgeOptions={defaultEdgeOptions}
+          connectionLineComponent={CustomConnectionLine}
+          className="touch-flow"
           zoomOnDoubleClick={false}
           zoomOnPinch={mode === "board"}
           zoomOnScroll={mode === "board"}

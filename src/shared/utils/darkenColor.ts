@@ -1,5 +1,8 @@
-export function darkenColor(color: string, amount: number = 50): string {
-  const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+export function darkenColor(
+  color: string,
+  isDarkMode: boolean = false,
+  amount: number = 50
+): string {
   const adjustedAmount = isDarkMode ? -amount + amount / 2 : amount;
 
   const rgbMatch = color.match(/\d+/g);

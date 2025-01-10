@@ -1,5 +1,6 @@
 import { useCallback, useRef } from "react";
 import { darkenColor } from "../utils/darkenColor";
+import { useDarkMode } from "../hooks/useDarkMode";
 
 interface AutoResizeInputProps {
   content: string;
@@ -17,6 +18,7 @@ export function AutoResizeInput({
   setContent,
 }: AutoResizeInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const isDarkMode = useDarkMode();
 
   const handleInput = useCallback(() => {
     if (inputRef.current) {
@@ -49,7 +51,7 @@ export function AutoResizeInput({
       }}
       className="spellchecker:words absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 transform cursor-text resize-none overflow-hidden bg-transparent py-2 text-center text-base focus:outline-none"
       style={{
-        color: darkenColor(color),
+        color: darkenColor(color, isDarkMode),
         width: width - 16,
         maxHeight: height - 16,
       }}

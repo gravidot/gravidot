@@ -2,6 +2,10 @@ export interface GravidotNode {
   id: string;
   type: string;
   position: Position;
+  measured?: { width: number; height: number };
+  internals: {
+    positionAbsolute: Position;
+  };
   data: Shape;
 }
 
@@ -19,6 +23,7 @@ export interface GravidotEdge {
   id: string;
   source: string;
   target: string;
+  reconnectable: boolean;
   animated: boolean;
 }
 

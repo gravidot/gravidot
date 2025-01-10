@@ -126,6 +126,7 @@ export const useShapeGestures = ({
           id: `${nodes.length + 1}`,
           type: "shape",
           position,
+          internals: { positionAbsolute: position },
           data: {
             type: randomType,
             content: `Add text!`,
