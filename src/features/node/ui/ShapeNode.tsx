@@ -98,7 +98,6 @@ export function ShapeNodeComponent({
       )}
       <AutoResizeInput
         content={text}
-        color={color.fill}
         width={size.w}
         height={size.h}
         setContent={setText}
