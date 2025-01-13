@@ -27,7 +27,7 @@
   - [1. 무한 캔버스의 백그라운드 그리드 구현: svg 채택](#1.-무한-캔버스의-백그라운드-그리드-구현:-svg-채택)
   - [2. 낮은 해상도에 DPR 적용하기](#2.-낮은-해상도에-DPR-적용하기)
   - [3. 멀티터치 hook 구현](#3.-멀티터치-hook-구현)
-  - [4. ResizeObserver loop completed with undelivered notifications 경고: 비동기적으로 처리하여 해결](#4.-ResizeObserver-loop-completed-with-undelivered-notifications-경고:-비동기적으로-처리하여-해결)
+  - [4. ResizeObserver loop 경고: 비동기적으로 처리하여 해결](#4.-ResizeObserver-loop-경고:-비동기적으로-처리하여-해결)
 
 <br>
 
