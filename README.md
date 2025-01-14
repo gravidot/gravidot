@@ -130,6 +130,7 @@
 아직 localhost 로 개발중인 환경이라면, 터미널을 열고 ifconfig en0를 입력하여 네트워크 인터페이스의 설정 정보 중 첫 번째 이더넷 어댑터를 조회할 수 있습니다. 아래 이미지에서 inet 뒤에있는 “IP 주소” + “:포트번호” 를 아이패드 Safari 에 입력하면 잘 렌더링됩니다.
 
 ![ipad](https://github.com/user-attachments/assets/e129bbae-efc4-4296-9ead-b4b23083dc82)
+![localhost](https://github.com/user-attachments/assets/eee9ece1-5516-45fc-93b7-9af95837953c)
 
 <br>
 
