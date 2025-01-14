@@ -99,6 +99,8 @@
 - **보드 편집 모드**와 **노드 편집 모드**로 토글링할 수 있습니다.
 - 휴지통 버튼으로 보드를 삭제할 수 있습니다.
 
+![IMG_1272](https://github.com/user-attachments/assets/8b0cbabb-e7bd-4fc8-81c2-5f29e128a3c5)
+
 <br>
 
 ## [기술 스택](#목차)
@@ -125,7 +127,9 @@
 
 아이패드를 C 타입의 케이블로 연결하고 Safari 상단의 Develop 을 클릭하고 아래와 같이 iPadOS 를 확인하여 콘솔창을 열어볼 수 있습니다.
 
-아직 localhost 로 개발중인 환경이라면, 터미널을 열고 ifconfig en0를 입력하여 네트워크 인터페이스의 설정 정보 중 첫 번째 이더넷 어댑터를 조회할 수 있습니다. 아래 이미지에서 inet 뒤에있는 “IP 주소” + “:포트번호” 를 아이패드 Safari 에 입력하면 잘 렌더링됩니다!
+아직 localhost 로 개발중인 환경이라면, 터미널을 열고 ifconfig en0를 입력하여 네트워크 인터페이스의 설정 정보 중 첫 번째 이더넷 어댑터를 조회할 수 있습니다. 아래 이미지에서 inet 뒤에있는 “IP 주소” + “:포트번호” 를 아이패드 Safari 에 입력하면 잘 렌더링됩니다.
+
+![ipad](https://github.com/user-attachments/assets/e129bbae-efc4-4296-9ead-b4b23083dc82)
 
 <br>
 
